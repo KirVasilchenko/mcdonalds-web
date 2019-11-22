@@ -1,0 +1,4 @@
+CREATE TABLE products (
+   id INTEGER PRIMARY KEY AUTOINCREMENT,
+   price INTEGER NOT NULL CHECK (price >= 0) default 0
+);

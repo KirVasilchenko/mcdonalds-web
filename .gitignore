@@ -28,3 +28,6 @@
 ### OS Specific ###
 .DS_Store*
 Thumbs.db*
+
+### Apache Tomcat Core ###
+apache-tomcat*

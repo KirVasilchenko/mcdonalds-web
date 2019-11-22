@@ -25,7 +25,7 @@
 <%-- null -> for non-existent attribute --%>
 <div class="container">
   <%-- ul>li + Tab --%>
-  <h1>Burger Shop</h1>
+  <h1>Star Burger</h1>
 
     <% List<OrderPositionModel> positions = (List<OrderPositionModel>) request.getAttribute("ordered-items"); %>
     <p><%= positions.size() %></p>

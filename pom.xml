@@ -6,15 +6,15 @@
 
     <groupId>ru.rosbank.javaschool</groupId>
     <artifactId>mcdonalds-web</artifactId>
-    <version>1.0</version>
+    <version>1.1</version>
     <packaging>pom</packaging>
 
     <properties>
-        <sql-lib.version>1.0</sql-lib.version>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <web-app.version>1.0</web-app.version>
+        <sql-lib.version>1.1</sql-lib.version>
+        <web-app.version>1.1</web-app.version>
         <javax.servlet-api.version>4.0.1</javax.servlet-api.version>
         <javax.servlet.jsp-api.version>2.3.3</javax.servlet.jsp-api.version>
         <webapp-runner.version>9.0.27.1</webapp-runner.version>
@@ -29,11 +29,6 @@
     <!--  dependencyManagement не добавляет зависимостей, а только определяет  -->
     <dependencyManagement>
         <dependencies>
-            <dependency>
-                <groupId>ru.rosbank.javaschool</groupId>
-                <artifactId>sql-lib</artifactId>
-                <version>${sql-lib.version}</version>
-            </dependency>
             <dependency>
                 <groupId>javax.servlet</groupId>
                 <artifactId>javax.servlet-api</artifactId>
@@ -60,6 +55,12 @@
                 <groupId>org.xerial</groupId>
                 <artifactId>sqlite-jdbc</artifactId>
                 <version>${sqlite-jdbc.version}</version>
+                <scope>runtime</scope>
+            </dependency>
+            <dependency>
+                <groupId>ru.rosbank.javaschool</groupId>
+                <artifactId>sql-lib</artifactId>
+                <version>${sql-lib.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.projectlombok</groupId>

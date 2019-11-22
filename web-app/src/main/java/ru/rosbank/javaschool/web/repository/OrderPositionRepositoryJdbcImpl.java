@@ -8,7 +8,7 @@ import ru.rosbank.javaschool.web.model.OrderPositionModel;
 import ru.rosbank.javaschool.web.model.ProductModel;
 
 import javax.sql.DataSource;
-import javax.swing.tree.RowMapper;
+import ru.rosbank.javaschool.util.RowMapper;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;

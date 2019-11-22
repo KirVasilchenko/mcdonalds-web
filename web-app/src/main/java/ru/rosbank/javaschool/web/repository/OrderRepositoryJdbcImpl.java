@@ -2,7 +2,7 @@ package ru.rosbank.javaschool.web.repository;
 
 
 import ru.rosbank.javaschool.util.RowMapper;
-import ru.rosbank.javaschool.util.SQLTemplate;
+import ru.rosbank.javaschool.util.SQLLib;
 import ru.rosbank.javaschool.web.exception.DataAccessException;
 import ru.rosbank.javaschool.web.model.OrderModel;
 

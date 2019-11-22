@@ -20,7 +20,7 @@
     <dependencies>
         <dependency>
             <groupId>ru.rosbank.javaschool</groupId>
-            <artifactId>sql-template</artifactId>
+            <artifactId>sql-lib</artifactId>
         </dependency>
         <dependency>
             <groupId>javax.servlet</groupId>
@@ -67,7 +67,7 @@
                                 </dependency>
                                 <dependency>
                                     <groupId>ru.rosbank.javaschool</groupId>
-                                    <artifactId>sql-template</artifactId>
+                                    <artifactId>sql-lib</artifactId>
                                 </dependency>
                             </artifactItems>
                         </configuration>

@@ -13,12 +13,12 @@ import java.util.Optional;
 
 public class OrderRepositoryJdbcImpl implements OrderRepository {
     private final DataSource ds;
-    private final SQLTemplate template;
+    private final SQLLib template;
     private final RowMapper<OrderModel> mapper = rs -> new OrderModel(
             rs.getInt("id")
     );
 
-    public OrderRepositoryJdbcImpl(DataSource ds, SQLTemplate template) {
+    public OrderRepositoryJdbcImpl(DataSource ds, SQLLib template) {
         this.ds = ds;
         this.template = template;
 

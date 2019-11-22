@@ -10,10 +10,10 @@
     <packaging>pom</packaging>
 
     <properties>
+        <sql-lib.version>1.0</sql-lib.version>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <sql-template.version>1.0</sql-template.version>
         <web-app.version>1.0</web-app.version>
         <javax.servlet-api.version>4.0.1</javax.servlet-api.version>
         <javax.servlet.jsp-api.version>2.3.3</javax.servlet.jsp-api.version>
@@ -29,6 +29,11 @@
     <!--  dependencyManagement не добавляет зависимостей, а только определяет  -->
     <dependencyManagement>
         <dependencies>
+            <dependency>
+                <groupId>ru.rosbank.javaschool</groupId>
+                <artifactId>sql-lib</artifactId>
+                <version>${sql-lib.version}</version>
+            </dependency>
             <dependency>
                 <groupId>javax.servlet</groupId>
                 <artifactId>javax.servlet-api</artifactId>
@@ -57,11 +62,6 @@
                 <version>${sqlite-jdbc.version}</version>
             </dependency>
             <dependency>
-                <groupId>ru.rosbank.javaschool</groupId>
-                <artifactId>sql-template</artifactId>
-                <version>${sql-template.version}</version>
-            </dependency>
-            <dependency>
                 <groupId>org.projectlombok</groupId>
                 <artifactId>lombok</artifactId>
                 <version>${lombok.version}</version>
@@ -73,19 +73,19 @@
     <distributionManagement>
         <repository>
             <id>github</id>
-            <url>https://maven.pkg.github.com/coursar/rosbank-starter</url>
+            <url>https://maven.pkg.github.com/KirVasilchenko/mcdonalds-web</url>
         </repository>
     </distributionManagement>
 
     <repositories>
         <repository>
             <id>github</id>
-            <url>https://maven.pkg.github.com/coursar/rosbank-starter</url>
+            <url>https://maven.pkg.github.com/KirVasilchenko/mcdonalds-web</url>
         </repository>
     </repositories>
 
     <modules>
-        <module>sql-template</module>
+        <module>sql-lib</module>
         <module>web-app</module>
     </modules>
 </project>

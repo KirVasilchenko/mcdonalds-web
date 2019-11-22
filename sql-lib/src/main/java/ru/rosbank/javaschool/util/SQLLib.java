@@ -7,7 +7,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 
-public class SQLTemplate {
+public class SQLLib {
     public <T> List<T> queryForList(DataSource dataSource, String query, RowMapper<T> mapper) throws SQLException {
         // нужно cast'ить, т.к. в противном случае компилятор не догадается, какой из методов мы вызваем
         return execute(dataSource, query, (Executable<List<T>>) resultSet -> {

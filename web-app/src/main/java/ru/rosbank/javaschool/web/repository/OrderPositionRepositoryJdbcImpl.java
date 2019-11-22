@@ -2,19 +2,20 @@ package ru.rosbank.javaschool.web.repository;
 
 
 import ru.rosbank.javaschool.util.RowMapper;
-import ru.rosbank.javaschool.util.SQLTemplate;
+import ru.rosbank.javaschool.util.SQLLib;
 import ru.rosbank.javaschool.web.exception.DataAccessException;
 import ru.rosbank.javaschool.web.model.OrderPositionModel;
 import ru.rosbank.javaschool.web.model.ProductModel;
 
 import javax.sql.DataSource;
+import javax.swing.tree.RowMapper;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 
 public class OrderPositionRepositoryJdbcImpl implements OrderPositionRepository {
     private final DataSource ds;
-    private final SQLTemplate template;
+    private final SQLLib template;
     private final RowMapper<OrderPositionModel> mapper = rs -> new OrderPositionModel(
             rs.getInt("id"),
             rs.getInt("order_id"),
@@ -24,7 +25,7 @@ public class OrderPositionRepositoryJdbcImpl implements OrderPositionRepository 
             rs.getInt("product_quantity")
     );
 
-    public OrderPositionRepositoryJdbcImpl(DataSource ds, SQLTemplate template) {
+    public OrderPositionRepositoryJdbcImpl(DataSource ds, SQLLib template) {
         this.ds = ds;
         this.template = template;
 

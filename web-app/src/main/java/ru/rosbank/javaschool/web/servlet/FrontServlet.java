@@ -1,6 +1,6 @@
 package ru.rosbank.javaschool.web.servlet;
 
-import ru.rosbank.javaschool.util.SQLTemplate;
+import ru.rosbank.javaschool.util.SQLLib;
 import ru.rosbank.javaschool.web.constant.Constants;
 import ru.rosbank.javaschool.web.model.ProductModel;
 import ru.rosbank.javaschool.web.repository.*;
@@ -37,7 +37,7 @@ public class FrontServlet extends HttpServlet {
       // TODO: неплохо бы: чтобы это было автоматически
       InitialContext initialContext = new InitialContext();
       DataSource dataSource = (DataSource) initialContext.lookup("java:/comp/env/jdbc/db");
-      SQLTemplate sqlTemplate = new SQLTemplate();
+      SQLLib sqlTemplate = new SQLLib();
       ProductRepository productRepository = new ProductRepositoryJdbcImpl(dataSource, sqlTemplate);
       OrderRepository orderRepository = new OrderRepositoryJdbcImpl(dataSource, sqlTemplate);
       OrderPositionRepository orderPositionRepository = new OrderPositionRepositoryJdbcImpl(dataSource, sqlTemplate);

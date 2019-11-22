@@ -1,7 +1,7 @@
 package ru.rosbank.javaschool.web.repository;
 
 
-import ru.rosbank.javaschool.util.SQLTemplate;
+import ru.rosbank.javaschool.util.SQLLib;
 import ru.rosbank.javaschool.util.RowMapper;
 import ru.rosbank.javaschool.web.exception.DataAccessException;
 import ru.rosbank.javaschool.web.model.ProductModel;
@@ -13,7 +13,7 @@ import java.util.Optional;
 
 public class ProductRepositoryJdbcImpl implements ProductRepository {
     private final DataSource ds;
-    private final SQLTemplate template;
+    private final SQLLib template;
     private final RowMapper<ProductModel> mapper = rs -> new ProductModel(
             rs.getInt("id"),
             rs.getString("name"),
@@ -22,7 +22,7 @@ public class ProductRepositoryJdbcImpl implements ProductRepository {
             rs.getString("image_url")
     );
 
-    public ProductRepositoryJdbcImpl(DataSource ds, SQLTemplate template) {
+    public ProductRepositoryJdbcImpl(DataSource ds, SQLLib template) {
         this.ds = ds;
         this.template = template;
 

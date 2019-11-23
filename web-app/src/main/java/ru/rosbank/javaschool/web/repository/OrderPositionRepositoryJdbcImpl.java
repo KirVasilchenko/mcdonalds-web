@@ -8,7 +8,9 @@ import ru.rosbank.javaschool.web.model.OrderPositionModel;
 import ru.rosbank.javaschool.web.model.ProductModel;
 
 import javax.sql.DataSource;
+
 import ru.rosbank.javaschool.util.RowMapper;
+
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
@@ -21,8 +23,8 @@ public class OrderPositionRepositoryJdbcImpl implements OrderPositionRepository 
             rs.getInt("order_id"),
             rs.getInt("product_id"),
             rs.getString("product_name"),
-            rs.getInt("product_price"),
-            rs.getInt("product_quantity")
+            rs.getInt("price"),
+            rs.getInt("quantity")
     );
 
     public OrderPositionRepositoryJdbcImpl(DataSource ds, SQLLib template) {
@@ -30,14 +32,16 @@ public class OrderPositionRepositoryJdbcImpl implements OrderPositionRepository 
         this.template = template;
 
         try {
-            template.update(ds, "CREATE TABLE IF NOT EXISTS orders_positions (\n" +
-                    "id INTEGER PRIMARY KEY AUTOINCREMENT,\n" +
-                    "order_id INTEGER NOT NULL REFERENCES orders,\n" +
-                    "product_id INTEGER NOT NULL REFERENCES products,\n" +
-                    "product_name TEXT NOT NULL,\n" +
-                    "product_price INTEGER NOT NULL CHECK (product_price >= 0),\n" +
-                    "product_quantity INTEGER NOT NULL DEFAULT 0 CHECK (product_quantity >= 0)" +
-                    ");");
+            template.update(ds, "CREATE TABLE IF NOT EXISTS orderPositions\n" +
+                    "(\n" +
+                    "id           INTEGER PRIMARY KEY AUTOINCREMENT,\n" +
+                    "order_id     INTEGER REFERENCES orders,\n" +
+                    "product_id   INTEGER REFERENCES products,\n" +
+                    "product_name TEXT    NOT NULL,\n" +
+                    "price        INTEGER NOT NULL CHECK ( price >= 0 ),\n" +
+                    "quantity     INTEGER NOT NULL CHECK ( quantity > 0 )\n" +
+                    ");"
+            );
         } catch (SQLException e) {
             throw new DataAccessException(e);
         }
@@ -46,7 +50,7 @@ public class OrderPositionRepositoryJdbcImpl implements OrderPositionRepository 
     @Override
     public List<OrderPositionModel> getAll() {
         try {
-            return template.queryForList(ds, "SELECT id, order_id, product_id, product_name, product_price, product_quantity FROM orders_positions;", mapper);
+            return template.queryForList(ds, "SELECT id, order_id, product_id, product_name, price, quantity FROM orderPositions;", mapper);
         } catch (SQLException e) {
             throw new DataAccessException(e);
         }
@@ -55,7 +59,7 @@ public class OrderPositionRepositoryJdbcImpl implements OrderPositionRepository 
     @Override
     public Optional<OrderPositionModel> getById(int id) {
         try {
-            return template.queryForObject(ds, "SELECT id, order_id, product_id, product_name, product_price, product_quantity FROM orders_positions WHERE id = ?;", stmt -> {
+            return template.queryForObject(ds, "SELECT id, order_id, product_id, product_name, price, quantity FROM orderPositions WHERE id = ?;", stmt -> {
                 stmt.setInt(1, id);
                 return stmt;
             }, mapper);
@@ -68,7 +72,7 @@ public class OrderPositionRepositoryJdbcImpl implements OrderPositionRepository 
     public void save(OrderPositionModel model) {
         try {
             if (model.getId() == 0) {
-                int id = template.<Integer>updateForId(ds, "INSERT INTO orders_positions(order_id, product_id, product_name, product_price, product_quantity) VALUES (?, ?, ?, ?, ?);", stmt -> {
+                int id = template.<Integer>updateForId(ds, "INSERT INTO orderPositions(order_id, product_id, product_name, price, quantity) VALUES (?, ?, ?, ?, ?);", stmt -> {
                     int nextIndex = 1;
                     stmt.setInt(nextIndex++, model.getOrderId());
                     stmt.setInt(nextIndex++, model.getProductId());
@@ -79,7 +83,7 @@ public class OrderPositionRepositoryJdbcImpl implements OrderPositionRepository 
                 });
                 model.setId(id);
             } else {
-                template.update(ds, "UPDATE orders_positions SET order_id = ? product_id = ?, product_name = ?, product_price = ?, product_quantity = ? WHERE id = ?;", stmt -> {
+                template.update(ds, "UPDATE orderPositions SET order_id = ? product_id = ?, product_name = ?, price = ?, quantity = ? WHERE id = ?;", stmt -> {
                     int nextIndex = 1;
                     stmt.setInt(nextIndex++, model.getOrderId());
                     stmt.setInt(nextIndex++, model.getProductId());
@@ -97,7 +101,7 @@ public class OrderPositionRepositoryJdbcImpl implements OrderPositionRepository 
     @Override
     public void removeById(int id) {
         try {
-            template.update(ds, "DELETE FROM orders_positions WHERE id = ?;", stmt -> {
+            template.update(ds, "DELETE FROM orderPositions WHERE id = ?;", stmt -> {
                 stmt.setInt(1, id);
                 return stmt;
             });
@@ -109,7 +113,7 @@ public class OrderPositionRepositoryJdbcImpl implements OrderPositionRepository 
     @Override
     public List<OrderPositionModel> getAllByOrderId(int orderId) {
         try {
-            return template.queryForList(ds, "SELECT id, order_id, product_id, product_name, product_price, product_quantity FROM orders_positions WHERE order_id = ?;", mapper, stmt -> {
+            return template.queryForList(ds, "SELECT id, order_id, product_id, product_name, price, quantity FROM orderPositions WHERE order_id = ?;", mapper, stmt -> {
                 stmt.setInt(1, orderId);
                 return stmt;
             });

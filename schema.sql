@@ -33,7 +33,7 @@ CREATE TABLE desserts
     syrup      TEXT NOT NULL default 'Chocolate'
 );
 
-CREATE TABLE orders
+CREATE TABLE IF NOT EXISTS orders
 (
     id     INTEGER PRIMARY KEY AUTOINCREMENT,
     date   TEXT NOT NULL,
@@ -41,7 +41,7 @@ CREATE TABLE orders
     status TEXT NOT NULL DEFAULT 'UNPAID'
 );
 
-CREATE TABLE orderPositions
+CREATE TABLE IF NOT EXISTS orderPositions
 (
     id           INTEGER PRIMARY KEY AUTOINCREMENT,
     order_id     INTEGER REFERENCES orders,

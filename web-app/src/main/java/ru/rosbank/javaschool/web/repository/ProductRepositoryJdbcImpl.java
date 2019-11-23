@@ -31,36 +31,36 @@ public class ProductRepositoryJdbcImpl implements ProductRepository {
 
         try {
 //            template.update(ds, "DROP TABLE products;");
-            template.update(ds, "CREATE TABLE IF NOT EXISTS products" +
-                    "(" +
-                    "id          INTEGER PRIMARY KEY AUTOINCREMENT," +
-                    "name        TEXT    NOT NULL UNIQUE," +
-                    "price       INTEGER NOT NULL CHECK (price >= 0)      DEFAULT 0," +
-                    "quantity    INTEGER NOT NULL CHECK ( quantity >= 0 ) DEFAULT 0," +
-                    "image       TEXT                                     DEFAULT 'https://sun9-51.userapi.com/c853528/v853528760/17c8c7/s6AWQdYJC04.jpg'," +
-                    "description TEXT    NOT NULL                         DEFAULT 'No description yet...'" +
-                    "hidden      INTEGER                                  DEFAULT 0" +
-                    ");" +
-                    "CREATE TABLE IF NOT EXISTS burgers" +
-                    "(" +
-                    "product_id   INTEGER," +
-                    "cutlet_meat  TEXT    NOT NULL                             default 'Beef'," +
-                    "cutlet_count INTEGER NOT NULL CHECK ( cutlet_count >= 0 ) default 1" +
-                    ");" +
-                    "CREATE TABLE IF NOT EXISTS potatoes" +
-                    "(" +
-                    "product_id  INTEGER," +
-                    "weight_in_g INTEGER NOT NULL CHECK ( weight_in_g >= 0 ) default 50" +
-                    ");" +
-                    "CREATE TABLE IF NOT EXISTS drinks" +
-                    "(" +
-                    "product_id   INTEGER," +
-                    "volume_in_ml INTEGER NOT NULL CHECK ( volume_in_ml >= 0 ) default 400" +
-                    ");" +
-                    "CREATE TABLE IF NOT EXISTS desserts" +
-                    "(" +
-                    "product_id INTEGER," +
-                    "syrup      TEXT NOT NULL default 'Chocolate'" +
+            template.update(ds, "CREATE TABLE IF NOT EXISTS products\n" +
+                    "(\n" +
+                    "id          INTEGER PRIMARY KEY AUTOINCREMENT,\n" +
+                    "name        TEXT    NOT NULL UNIQUE,\n" +
+                    "price       INTEGER NOT NULL CHECK (price >= 0)      DEFAULT 0,\n" +
+                    "quantity    INTEGER NOT NULL CHECK ( quantity >= 0 ) DEFAULT 0,\n" +
+                    "image       TEXT                                     DEFAULT 'https://sun9-51.userapi.com/c853528/v853528760/17c8c7/s6AWQdYJC04.jpg',\n" +
+                    "description TEXT    NOT NULL                         DEFAULT 'No description yet...'\n" +
+                    "hidden      INTEGER                                  DEFAULT 0\n" +
+                    ");\n" +
+                    "CREATE TABLE IF NOT EXISTS burgers\n" +
+                    "(\n" +
+                    "product_id   INTEGER,\n" +
+                    "cutlet_meat  TEXT    NOT NULL                             default 'Beef',\n" +
+                    "cutlet_count INTEGER NOT NULL CHECK ( cutlet_count >= 0 ) default 1\n" +
+                    ");\n" +
+                    "CREATE TABLE IF NOT EXISTS potatoes\n" +
+                    "(\n" +
+                    "product_id  INTEGER,\n" +
+                    "weight_in_g INTEGER NOT NULL CHECK ( weight_in_g >= 0 ) default 50\n" +
+                    ");\n" +
+                    "CREATE TABLE IF NOT EXISTS drinks\n" +
+                    "(\n" +
+                    "product_id   INTEGER,\n" +
+                    "volume_in_ml INTEGER NOT NULL CHECK ( volume_in_ml >= 0 ) default 400\n" +
+                    ");\n" +
+                    "CREATE TABLE IF NOT EXISTS desserts\n" +
+                    "(\n" +
+                    "product_id INTEGER,\n" +
+                    "syrup      TEXT NOT NULL default 'Chocolate'\n" +
                     ");");
         } catch (SQLException e) {
             throw new DataAccessException(e);

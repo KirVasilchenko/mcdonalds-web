@@ -15,7 +15,10 @@ public class OrderRepositoryJdbcImpl implements OrderRepository {
     private final DataSource ds;
     private final SQLLib template;
     private final RowMapper<OrderModel> mapper = rs -> new OrderModel(
-            rs.getInt("id")
+            rs.getInt("id"),
+            rs.getString("date"),
+            rs.getString("time"),
+            rs.getString("status")
     );
 
     public OrderRepositoryJdbcImpl(DataSource ds, SQLLib template) {
@@ -23,9 +26,14 @@ public class OrderRepositoryJdbcImpl implements OrderRepository {
         this.template = template;
 
         try {
-            template.update(ds, "CREATE TABLE IF NOT EXISTS orders (\n" +
-                    "id INTEGER PRIMARY KEY AUTOINCREMENT\n" +
-                    ");");
+            template.update(ds, "CREATE TABLE IF NOT EXISTS orders\n" +
+                    "(\n" +
+                    "id     INTEGER PRIMARY KEY AUTOINCREMENT,\n" +
+                    "date   TEXT NOT NULL,\n" +
+                    "time   TEXT NOT NULL,\n" +
+                    "status TEXT NOT NULL DEFAULT 'UNPAID'\n" +
+                    ");"
+            );
         } catch (SQLException e) {
             throw new DataAccessException(e);
         }
@@ -34,7 +42,7 @@ public class OrderRepositoryJdbcImpl implements OrderRepository {
     @Override
     public List<OrderModel> getAll() {
         try {
-            return template.queryForList(ds, "SELECT id FROM orders;", mapper);
+            return template.queryForList(ds, "SELECT id, date, time, status FROM orders;", mapper);
         } catch (SQLException e) {
             throw new DataAccessException(e);
         }
@@ -43,7 +51,7 @@ public class OrderRepositoryJdbcImpl implements OrderRepository {
     @Override
     public Optional<OrderModel> getById(int id) {
         try {
-            return template.queryForObject(ds, "SELECT id FROM orders WHERE id = ?;", stmt -> {
+            return template.queryForObject(ds, "SELECT id, date, time, status FROM orders WHERE id = ?;", stmt -> {
                 stmt.setInt(1, id);
                 return stmt;
             }, mapper);
@@ -56,7 +64,8 @@ public class OrderRepositoryJdbcImpl implements OrderRepository {
     public void save(OrderModel model) {
         try {
             if (model.getId() == 0) {
-                int id = template.<Integer>updateForId(ds, "INSERT INTO orders DEFAULT VALUES;");
+                int id = template.<Integer>updateForId(ds, "INSERT INTO orders (date, time) VALUES\n" +
+                        "(date('now'), time('now'));");
                 model.setId(id);
                 return;
             }

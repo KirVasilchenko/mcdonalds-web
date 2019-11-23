@@ -10,7 +10,7 @@
     <packaging>pom</packaging>
 
     <properties>
-        <sql-lib.version>1.1.1</sql-lib.version>
+        <sql-lib.version>1.1.2</sql-lib.version>
         <web-app.version>1.1.1</web-app.version>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>

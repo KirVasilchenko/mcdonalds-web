@@ -8,9 +8,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class OrderModel {
+public class DessertModel {
     private int id;
-    private String date;
-    private String time;
-    private String status;
+    private String syrup;
 }

@@ -8,9 +8,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class OrderModel {
+public class PotatoModel {
     private int id;
-    private String date;
-    private String time;
-    private String status;
+    private int weightInG;
 }

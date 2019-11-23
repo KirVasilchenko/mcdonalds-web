@@ -14,4 +14,6 @@ public class ProductModel {
     private int price;
     private int quantity;
     private String imageUrl;
+    private int description;
+    private boolean hidden;
 }

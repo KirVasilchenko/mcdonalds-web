@@ -19,8 +19,11 @@ public class ProductRepositoryJdbcImpl implements ProductRepository {
             rs.getString("name"),
             rs.getInt("price"),
             rs.getInt("quantity"),
-            rs.getString("image_url")
+            rs.getString("image"),
+            rs.getString("description"),
+            rs.getInt("hidden")
     );
+
 
     public ProductRepositoryJdbcImpl(DataSource ds, SQLLib template) {
         this.ds = ds;
@@ -28,11 +31,36 @@ public class ProductRepositoryJdbcImpl implements ProductRepository {
 
         try {
 //            template.update(ds, "DROP TABLE products;");
-            template.update(ds, "CREATE TABLE IF NOT EXISTS products (\n" +
-                    "id INTEGER PRIMARY KEY AUTOINCREMENT,\n" +
-                    "name TEXT NOT NULL, price INTEGER NOT NULL CHECK (price >= 0),\n" +
-                    "quantity INTEGER NOT NULL DEFAULT 0 CHECK (quantity >= 0),\n" +
-                    "image_url TEXT\n" +
+            template.update(ds, "CREATE TABLE IF NOT EXISTS products" +
+                    "(" +
+                    "id          INTEGER PRIMARY KEY AUTOINCREMENT," +
+                    "name        TEXT    NOT NULL UNIQUE," +
+                    "price       INTEGER NOT NULL CHECK (price >= 0)      DEFAULT 0," +
+                    "quantity    INTEGER NOT NULL CHECK ( quantity >= 0 ) DEFAULT 0," +
+                    "image       TEXT                                     DEFAULT 'https://sun9-51.userapi.com/c853528/v853528760/17c8c7/s6AWQdYJC04.jpg'," +
+                    "description TEXT    NOT NULL                         DEFAULT 'No description yet...'" +
+                    "hidden      INTEGER                                  DEFAULT 0" +
+                    ");" +
+                    "CREATE TABLE IF NOT EXISTS burgers" +
+                    "(" +
+                    "product_id   INTEGER," +
+                    "cutlet_meat  TEXT    NOT NULL                             default 'Beef'," +
+                    "cutlet_count INTEGER NOT NULL CHECK ( cutlet_count >= 0 ) default 1" +
+                    ");" +
+                    "CREATE TABLE IF NOT EXISTS potatoes" +
+                    "(" +
+                    "product_id  INTEGER," +
+                    "weight_in_g INTEGER NOT NULL CHECK ( weight_in_g >= 0 ) default 50" +
+                    ");" +
+                    "CREATE TABLE IF NOT EXISTS drinks" +
+                    "(" +
+                    "product_id   INTEGER," +
+                    "volume_in_ml INTEGER NOT NULL CHECK ( volume_in_ml >= 0 ) default 400" +
+                    ");" +
+                    "CREATE TABLE IF NOT EXISTS desserts" +
+                    "(" +
+                    "product_id INTEGER," +
+                    "syrup      TEXT NOT NULL default 'Chocolate'" +
                     ");");
         } catch (SQLException e) {
             throw new DataAccessException(e);
@@ -42,7 +70,7 @@ public class ProductRepositoryJdbcImpl implements ProductRepository {
     @Override
     public List<ProductModel> getAll() {
         try {
-            return template.queryForList(ds, "SELECT id, name, price, quantity, image_url FROM products;", mapper);
+            return template.queryForList(ds, "SELECT id, name, price, quantity, image, description, hidden FROM products;", mapper);
         } catch (SQLException e) {
             throw new DataAccessException(e);
         }
@@ -51,7 +79,7 @@ public class ProductRepositoryJdbcImpl implements ProductRepository {
     @Override
     public Optional<ProductModel> getById(int id) {
         try {
-            return template.queryForObject(ds, "SELECT id, name, quantity, price, image_url FROM products WHERE id = ?;", stmt -> {
+            return template.queryForObject(ds, "SELECT id, name, quantity, price, image, description, hidden FROM products WHERE id = ?;", stmt -> {
                 stmt.setInt(1, id);
                 return stmt;
             }, mapper);
@@ -64,22 +92,26 @@ public class ProductRepositoryJdbcImpl implements ProductRepository {
     public void save(ProductModel model) {
         try {
             if (model.getId() == 0) {
-                int id = template.<Integer>updateForId(ds, "INSERT INTO products(name, price, quantity, image_url) VALUES (?, ?, ?, ?);", stmt -> {
+                int id = template.<Integer>updateForId(ds, "INSERT INTO products(name, price, quantity, image, description, hidden) VALUES (?, ?, ?, ?, ?, ?);", stmt -> {
                     int nextIndex = 1;
                     stmt.setString(nextIndex++, model.getName());
                     stmt.setInt(nextIndex++, model.getPrice());
                     stmt.setInt(nextIndex++, model.getQuantity());
                     stmt.setString(nextIndex++, model.getImageUrl());
+                    stmt.setString(nextIndex++, model.getDescription());
+                    stmt.setInt(nextIndex++, model.getHidden());
                     return stmt;
                 });
                 model.setId(id);
             } else {
-                template.update(ds, "UPDATE products SET name = ?, price = ?, quantity = ?, image_url = ? WHERE id = ?;", stmt -> {
+                template.update(ds, "UPDATE products SET name = ?, price = ?, quantity = ?, image = ?, description = ?, hidden = ? WHERE id = ?;", stmt -> {
                     int nextIndex = 1;
                     stmt.setString(nextIndex++, model.getName());
                     stmt.setInt(nextIndex++, model.getPrice());
                     stmt.setInt(nextIndex++, model.getQuantity());
                     stmt.setString(nextIndex++, model.getImageUrl());
+                    stmt.setString(nextIndex++, model.getDescription());
+                    stmt.setInt(nextIndex++, model.getHidden());
                     stmt.setInt(nextIndex++, model.getId());
                     return stmt;
                 });

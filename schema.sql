@@ -3,8 +3,11 @@ CREATE TABLE products
     id       INTEGER PRIMARY KEY AUTOINCREMENT,
     name     TEXT    NOT NULL UNIQUE,
     price    INTEGER NOT NULL CHECK (price >= 0)      default 0,
-    quantity INTEGER NOT NULL CHECK ( quantity >= 0 ) default 0
+    quantity INTEGER NOT NULL CHECK ( quantity >= 0 ) default 0,
+    image TEXT DEFAULT 'https://sun9-51.userapi.com/c853528/v853528760/17c8c7/s6AWQdYJC04.jpg'
 );
+
+DROP TABLE products;
 
 CREATE TABLE burgers
 (

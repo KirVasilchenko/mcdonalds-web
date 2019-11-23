@@ -51,8 +51,8 @@ public class FrontServlet extends HttpServlet {
   }
 
   private void insertInitialData(ProductRepository productRepository) {
-    productRepository.save(new ProductModel(0, "Burger 1", 100, 1, null));
-    productRepository.save(new ProductModel(0, "Burger 2", 200, 2, null));
+    productRepository.save(new ProductModel(0, "Burger 3", 100, 1, "https://sun9-51.userapi.com/c853528/v853528760/17c8c7/s6AWQdYJC04.jpg"));
+    productRepository.save(new ProductModel(0, "Burger 4", 200, 2, "https://sun9-51.userapi.com/c853528/v853528760/17c8c7/s6AWQdYJC04.jpg"));
   }
 
   @Override

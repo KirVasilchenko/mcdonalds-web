@@ -51,8 +51,9 @@ public class FrontServlet extends HttpServlet {
   }
 
   private void insertInitialData(ProductRepository productRepository) {
-    productRepository.save(new ProductModel(0, "Burger 3", 100, 1, "https://sun9-51.userapi.com/c853528/v853528760/17c8c7/s6AWQdYJC04.jpg"));
-    productRepository.save(new ProductModel(0, "Burger 4", 200, 2, "https://sun9-51.userapi.com/c853528/v853528760/17c8c7/s6AWQdYJC04.jpg"));
+    productRepository.save(new ProductModel("Burger 3", 100, 1, "https://sun9-51.userapi.com/c853528/v853528760/17c8c7/s6AWQdYJC04.jpg", "desc"));
+    productRepository.save(new ProductModel("Burger 4", 200, 2, "https://sun9-51.userapi.com/c853528/v853528760/17c8c7/s6AWQdYJC04.jpg", "desc"));
+
   }
 
   @Override
@@ -79,7 +80,7 @@ public class FrontServlet extends HttpServlet {
           int price = Integer.parseInt(req.getParameter("price"));
           int quantity = Integer.parseInt(req.getParameter("quantity"));
           // TODO: validation
-          burgerAdminService.save(new ProductModel(id, name, price, quantity, null));
+          burgerAdminService.save(new ProductModel(id, name, price, quantity, "url", "desc"));
           resp.sendRedirect(url);
           return;
         }

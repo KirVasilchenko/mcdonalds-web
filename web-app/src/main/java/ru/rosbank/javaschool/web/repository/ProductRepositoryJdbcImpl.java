@@ -21,7 +21,7 @@ public class ProductRepositoryJdbcImpl implements ProductRepository {
             rs.getInt("quantity"),
             rs.getString("image"),
             rs.getString("description"),
-            rs.getInt("hidden")
+            rs.getString("category")
     );
 
 
@@ -38,8 +38,8 @@ public class ProductRepositoryJdbcImpl implements ProductRepository {
                     "price       INTEGER NOT NULL CHECK (price >= 0)      DEFAULT 0,\n" +
                     "quantity    INTEGER NOT NULL CHECK ( quantity >= 0 ) DEFAULT 0,\n" +
                     "image       TEXT                                     DEFAULT 'https://sun9-51.userapi.com/c853528/v853528760/17c8c7/s6AWQdYJC04.jpg',\n" +
-                    "description TEXT    NOT NULL                         DEFAULT 'No description yet...'\n" +
-                    "hidden      INTEGER                                  DEFAULT 0\n" +
+                    "description TEXT    NOT NULL                         DEFAULT 'No description yet...',\n" +
+                    "category TEXT NOT NULL DEFAULT 'burgers'\n" +
                     ");\n" +
                     "CREATE TABLE IF NOT EXISTS burgers\n" +
                     "(\n" +
@@ -70,7 +70,7 @@ public class ProductRepositoryJdbcImpl implements ProductRepository {
     @Override
     public List<ProductModel> getAll() {
         try {
-            return template.queryForList(ds, "SELECT id, name, price, quantity, image, description, hidden FROM products;", mapper);
+            return template.queryForList(ds, "SELECT id, name, price, quantity, image, description, category FROM products;", mapper);
         } catch (SQLException e) {
             throw new DataAccessException(e);
         }
@@ -79,7 +79,7 @@ public class ProductRepositoryJdbcImpl implements ProductRepository {
     @Override
     public Optional<ProductModel> getById(int id) {
         try {
-            return template.queryForObject(ds, "SELECT id, name, quantity, price, image, description, hidden FROM products WHERE id = ?;", stmt -> {
+            return template.queryForObject(ds, "SELECT id, name, quantity, price, image, description, category FROM products WHERE id = ?;", stmt -> {
                 stmt.setInt(1, id);
                 return stmt;
             }, mapper);
@@ -93,26 +93,26 @@ public class ProductRepositoryJdbcImpl implements ProductRepository {
         //TODO: probably we need something here for different categories.
         try {
             if (model.getId() == 0) {
-                int id = template.<Integer>updateForId(ds, "INSERT INTO products(name, price, quantity, image, description, hidden) VALUES (?, ?, ?, ?, ?, ?);", stmt -> {
+                int id = template.<Integer>updateForId(ds, "INSERT INTO products(name, price, quantity, image, description, category) VALUES (?, ?, ?, ?, ?, ?);", stmt -> {
                     int nextIndex = 1;
                     stmt.setString(nextIndex++, model.getName());
                     stmt.setInt(nextIndex++, model.getPrice());
                     stmt.setInt(nextIndex++, model.getQuantity());
                     stmt.setString(nextIndex++, model.getImageUrl());
                     stmt.setString(nextIndex++, model.getDescription());
-                    stmt.setInt(nextIndex++, model.getHidden());
+                    stmt.setString(nextIndex++, model.getCategory());
                     return stmt;
                 });
                 model.setId(id);
             } else {
-                template.update(ds, "UPDATE products SET name = ?, price = ?, quantity = ?, image = ?, description = ?, hidden = ? WHERE id = ?;", stmt -> {
+                template.update(ds, "UPDATE products SET name = ?, price = ?, quantity = ?, image = ?, description = ?, category = ? WHERE id = ?;", stmt -> {
                     int nextIndex = 1;
                     stmt.setString(nextIndex++, model.getName());
                     stmt.setInt(nextIndex++, model.getPrice());
                     stmt.setInt(nextIndex++, model.getQuantity());
                     stmt.setString(nextIndex++, model.getImageUrl());
                     stmt.setString(nextIndex++, model.getDescription());
-                    stmt.setInt(nextIndex++, model.getHidden());
+                    stmt.setString(nextIndex++, model.getCategory());
                     stmt.setInt(nextIndex++, model.getId());
                     return stmt;
                 });
@@ -124,7 +124,6 @@ public class ProductRepositoryJdbcImpl implements ProductRepository {
 
     @Override
     public void removeById(int id) {
-        //TODO: code duplication, need to pack it in.
         try {
             template.update(ds, "DELETE FROM products WHERE id = ?;", stmt -> {
                 stmt.setInt(1, id);

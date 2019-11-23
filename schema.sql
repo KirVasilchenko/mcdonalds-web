@@ -8,7 +8,7 @@ CREATE TABLE products
     quantity    INTEGER NOT NULL CHECK ( quantity >= 0 ) default 0,
     image       TEXT                                     DEFAULT 'https://sun9-51.userapi.com/c853528/v853528760/17c8c7/s6AWQdYJC04.jpg',
     description TEXT    NOT NULL                         DEFAULT 'No description yet...',
-    hidden INTEGER DEFAULT 0
+    category TEXT NOT NULL DEFAULT 'burgers'
 );
 
 CREATE TABLE burgers

@@ -27,7 +27,7 @@ public class BurgerUserService {
 
   // TODO: выяснить время работы сессии в Tomcat
   public int createOrder() {
-    OrderModel model = new OrderModel(0);
+    OrderModel model = new OrderModel(0, "", "", "");
     orderRepository.save(model);
     return model.getId();
   }

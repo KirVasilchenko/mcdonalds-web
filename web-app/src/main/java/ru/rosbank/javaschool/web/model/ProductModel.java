@@ -15,6 +15,16 @@ public class ProductModel {
     private int quantity;
     private String imageUrl;
     private String description;
-    private int hidden;
+    private String category;
+
+//    public ProductModel (String name, int price, int quantity, String imageUrl, String description) {
+//        this.name = name;
+//        this.price = price;
+//        this.quantity = quantity;
+//        this.imageUrl = imageUrl;
+//        this.description = description;
+//    }
 }
+
+
 

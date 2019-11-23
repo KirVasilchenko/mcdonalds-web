@@ -3,8 +3,8 @@ INSERT INTO orders (date, time) VALUES
 (date('now'), time('now'));
 
 -- CREATE NEW ORDER POSITION IN NEW ORDER
-INSERT INTO orderPositions (order_id, product_id, price, quantity) VALUES
-( (SELECT last_insert_rowid() FROM orders), 7, (SELECT price FROM products WHERE id = 7), 1);
+INSERT INTO orderPositions (order_id, product_id, product_name, price, quantity) VALUES
+( (SELECT last_insert_rowid() FROM orders), 7, (SELECT name FROM products WHERE id = 7), (SELECT price FROM products WHERE id = 7), 1);
 
 -- CHANGE QUANTITY, PRICE WILL BE CHANGED THE SAME WAY
 UPDATE orderPositions SET quantity = quantity + 1 WHERE order_id = 1;

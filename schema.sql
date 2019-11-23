@@ -50,8 +50,9 @@ CREATE TABLE orders
 CREATE TABLE orderPositions
 (
     id         INTEGER PRIMARY KEY AUTOINCREMENT,
-    order_id   INTEGER,
-    product_id INTEGER NOT NULL,
+    order_id   INTEGER REFERENCES orders,
+    product_id INTEGER REFERENCES products,
+    product_name TEXT NOT NULL,
     price      INTEGER NOT NULL CHECK ( price >= 0 ),
     quantity   INTEGER NOT NULL CHECK ( quantity > 0 )
 );

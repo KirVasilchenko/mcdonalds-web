@@ -90,6 +90,7 @@ public class ProductRepositoryJdbcImpl implements ProductRepository {
 
     @Override
     public void save(ProductModel model) {
+        //TODO: probably we need something here for different categories.
         try {
             if (model.getId() == 0) {
                 int id = template.<Integer>updateForId(ds, "INSERT INTO products(name, price, quantity, image, description, hidden) VALUES (?, ?, ?, ?, ?, ?);", stmt -> {
@@ -123,8 +124,41 @@ public class ProductRepositoryJdbcImpl implements ProductRepository {
 
     @Override
     public void removeById(int id) {
+        //TODO: code duplication, need to pack it in.
         try {
             template.update(ds, "DELETE FROM products WHERE id = ?;", stmt -> {
+                stmt.setInt(1, id);
+                return stmt;
+            });
+        } catch (SQLException e) {
+            throw new DataAccessException(e);
+        }
+        try {
+            template.update(ds, "DELETE FROM burgers WHERE id = ?;", stmt -> {
+                stmt.setInt(1, id);
+                return stmt;
+            });
+        } catch (SQLException e) {
+            throw new DataAccessException(e);
+        }
+        try {
+            template.update(ds, "DELETE FROM potatoes WHERE id = ?;", stmt -> {
+                stmt.setInt(1, id);
+                return stmt;
+            });
+        } catch (SQLException e) {
+            throw new DataAccessException(e);
+        }
+        try {
+            template.update(ds, "DELETE FROM drinks WHERE id = ?;", stmt -> {
+                stmt.setInt(1, id);
+                return stmt;
+            });
+        } catch (SQLException e) {
+            throw new DataAccessException(e);
+        }
+        try {
+            template.update(ds, "DELETE FROM desserts WHERE id = ?;", stmt -> {
                 stmt.setInt(1, id);
                 return stmt;
             });

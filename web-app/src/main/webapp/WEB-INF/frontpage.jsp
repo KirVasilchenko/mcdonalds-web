@@ -19,38 +19,12 @@
 
   <h1>Star Burger</h1>
 
-<%--    <% List<OrderPositionModel> positions = (List<OrderPositionModel>) request.getAttribute("ordered-items"); %>--%>
-<%--    <p>Items in cart: <%= positions.size() %></p>--%>
-<%--    <% for (OrderPositionModel model: positions) { %>--%>
-<%--    <p><%= model %></p>--%>
-<%--    <% } %>--%>
-
-  <% List<OrderPositionModel> positions = (List<OrderPositionModel>) request.getAttribute("ordered-items"); %>
-  <p>Items in cart: <%= positions.size() %></p>
-
-  <div class="row">
+    <% List<OrderPositionModel> positions = (List<OrderPositionModel>) request.getAttribute("ordered-items"); %>
+    <p>Items in cart: <%= positions.size() %></p>
     <% for (OrderPositionModel model: positions) { %>
-    <div class="col-3">
-      <div class="card mt-3">
-        <div class="card-body">
-          <h5 class="card-title"><%= model.getProductName() %>
-          </h5>
-          <ul class="list-group list-group-flush">
-            <li class="list-group-item">Price: <%= model.getProductPrice() %></li>
-          </ul>
-          <form action="<%= request.getContextPath() %>" method="post">
-            <input name="id" type="hidden" value="<%= model.getId() %>">
-            <div class="form group">
-              <label for="position_quantity">Product Quantity</label>
-              <input type="number" min="0" id="position_quantity" name="quantity" value="<%= model.getProductQuantity()%>">
-            </div>
-            <button class="btn btn-primary">Edit</button>
-          </form>
-        </div>
-      </div>
-    </div>
+    <p><%= model %></p>
     <% } %>
-  </div>
+
 
   <div class="row">
   <% for (ProductModel item : (List<ProductModel>) request.getAttribute(Constants.ITEMS)) { %>

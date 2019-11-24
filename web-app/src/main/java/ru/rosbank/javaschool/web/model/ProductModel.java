@@ -17,13 +17,14 @@ public class ProductModel {
     private String description;
     private String category;
 
-//    public ProductModel (String name, int price, int quantity, String imageUrl, String description) {
-//        this.name = name;
-//        this.price = price;
-//        this.quantity = quantity;
-//        this.imageUrl = imageUrl;
-//        this.description = description;
-//    }
+    public ProductModel (String name, int price, int quantity, String imageUrl, String description) {
+        this.name = name;
+        this.price = price;
+        this.quantity = quantity;
+        this.imageUrl = imageUrl;
+        this.description = description;
+        this.category = "others";
+    }
 }
 
 

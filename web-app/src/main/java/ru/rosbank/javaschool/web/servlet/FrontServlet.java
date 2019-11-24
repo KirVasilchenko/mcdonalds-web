@@ -80,7 +80,7 @@ public class FrontServlet extends HttpServlet {
           int price = Integer.parseInt(req.getParameter("price"));
           int quantity = Integer.parseInt(req.getParameter("quantity"));
           // TODO: validation
-          burgerAdminService.save(new ProductModel(id, name, price, quantity, "url", "desc"));
+          burgerAdminService.save(new ProductModel(id, name, price, quantity, "url", "desc", "others"));
           resp.sendRedirect(url);
           return;
         }

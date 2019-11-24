@@ -4,14 +4,14 @@
          xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_${WEB_XML_VERSION_FILE}.xsd"
          version="${WEB_XML_VERSION}">
     <servlet>
-        <servlet-name>test</servlet-name>
-        <servlet-class>ru.rosbank.javaschool.web.servlet.TestServlet</servlet-class>
+        <servlet-name>front</servlet-name>
+        <servlet-class>ru.rosbank.javaschool.web.servlet.FrontServlet</servlet-class>
         <load-on-startup>1</load-on-startup>
     </servlet>
 
     <!-- mapping - привязка обработчика к определённому URL-->
     <servlet-mapping>
-        <servlet-name>test</servlet-name>
+        <servlet-name>front</servlet-name>
         <url-pattern>/</url-pattern>
     </servlet-mapping>
 

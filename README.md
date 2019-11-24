@@ -1,0 +1,1 @@
+[![Build Status](https://travis-ci.org/KirVasilchenko/mcdonalds-web.svg?branch=master)](https://travis-ci.org/KirVasilchenko/mcdonalds-web)

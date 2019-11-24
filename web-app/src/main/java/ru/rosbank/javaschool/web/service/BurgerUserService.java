@@ -47,4 +47,8 @@ public class BurgerUserService {
   public List<OrderPositionModel> getAllOrderPosition(int orderId) {
       return orderPositionRepository.getAllByOrderId(orderId);
   }
+
+  public void removePositionById(int positionId) {
+    orderPositionRepository.removeById(positionId);
+  }
 }

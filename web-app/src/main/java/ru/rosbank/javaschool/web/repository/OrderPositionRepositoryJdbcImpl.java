@@ -84,13 +84,14 @@ public class OrderPositionRepositoryJdbcImpl implements OrderPositionRepository 
                 });
                 model.setId(id);
             } else {
-                template.update(ds, "UPDATE orderPositions SET order_id = ? product_id = ?, product_name = ?, price = ?, quantity = ? WHERE id = ?;", stmt -> {
+                template.update(ds, "UPDATE orderPositions SET order_id = ?, product_id = ?, product_name = ?, price = ?, quantity = ? WHERE id = ?;", stmt -> {
                     int nextIndex = 1;
                     stmt.setInt(nextIndex++, model.getOrderId());
                     stmt.setInt(nextIndex++, model.getProductId());
                     stmt.setString(nextIndex++, model.getProductName());
                     stmt.setInt(nextIndex++, model.getProductPrice());
                     stmt.setInt(nextIndex++, model.getProductQuantity());
+                    stmt.setInt(nextIndex++, model.getId());
                     return stmt;
                 });
             }

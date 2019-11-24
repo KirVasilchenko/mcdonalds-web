@@ -22,7 +22,7 @@
     <% List<OrderPositionModel> positions = (List<OrderPositionModel>) request.getAttribute("ordered-items"); %>
     <p>Items in cart: <%= positions.size() %></p>
     <% for (OrderPositionModel model: positions) { %>
-    <p><%= model %></p>
+    <p><%= model.getProductName() %> : <%= model.getProductPrice()%>,00 RUB x <%= model.getProductQuantity() %> = <%= model.getProductPrice()*model.getProductQuantity() %> <a href="<%= request.getContextPath() %>/update?id=<%= model.getId()%>" class="btn btn-primary">Edit</a> <a href="<%= request.getContextPath() %>/remove?id=<%= model.getId()%>" class="btn btn-primary">Remove</a></p>
     <% } %>
   <p><a href="/admin">Admin window</a></p>
 

@@ -2,6 +2,7 @@ package ru.rosbank.javaschool.web.servlet;
 
 import ru.rosbank.javaschool.util.SQLLib;
 import ru.rosbank.javaschool.web.constant.Constants;
+import ru.rosbank.javaschool.web.model.OrderPositionModel;
 import ru.rosbank.javaschool.web.model.ProductModel;
 import ru.rosbank.javaschool.web.repository.*;
 import ru.rosbank.javaschool.web.service.BurgerAdminService;
@@ -49,15 +50,12 @@ public class FrontServlet extends HttpServlet {
 
     @Override
     protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-
         if (req.getMethod().equals("GET")) {
             doGet(req, resp);
         }
         if (req.getMethod().equals("POST")) {
             doPost(req, resp);
         }
-
-
     }
 
 
@@ -93,6 +91,29 @@ public class FrontServlet extends HttpServlet {
             req.getRequestDispatcher("/WEB-INF/more.jsp").forward(req, resp);
             return;
         }
+        if (url.startsWith("/update")) {
+            int id = Integer.parseInt(req.getParameter(Constants.ORDERPOSITIONS_COLUMN_ID));
+            OrderPositionModel model = burgerUserService.getPositionById(id);
+            req.setAttribute(Constants.ORDERPOSITIONS_COLUMN_ID, model.getId());
+            req.setAttribute(Constants.ORDERPOSITIONS_COLUMN_ORDERID, model.getOrderId());
+            req.setAttribute(Constants.ORDERPOSITIONS_COLUMN_PRODUCTID, model.getProductId());
+            req.setAttribute(Constants.ORDERPOSITIONS_COLUMN_PRODUCTNAME, model.getProductName());
+            req.setAttribute(Constants.ORDERPOSITIONS_COLUMN_PRICE, model.getProductPrice());
+            req.setAttribute(Constants.ORDERPOSITIONS_COLUMN_QUANTITY, model.getProductQuantity());
+            req.getRequestDispatcher("/WEB-INF/update.jsp").forward(req, resp);
+            return;
+        }
+
+        if (url.startsWith("/remove")) {
+            if (url.equals("/remove")) {
+                int id = Integer.parseInt(req.getParameter(Constants.ORDERPOSITIONS_COLUMN_ID));
+                burgerUserService.removePositionById(id);
+                resp.sendRedirect("/");
+                return;
+            }
+            return;
+        }
+
         if (url.equals("/")) {
             HttpSession session = req.getSession();
             if (session.isNew()) {
@@ -123,6 +144,21 @@ public class FrontServlet extends HttpServlet {
                 // TODO: validation
                 burgerAdminService.save(new ProductModel(id, name, price, quantity, image, description, category));
                 resp.sendRedirect(url);
+                return;
+            }
+            return;
+        }
+        if (url.startsWith("/update")) {
+            if (url.equals("/update")) {
+                int id = Integer.parseInt(req.getParameter(Constants.ORDERPOSITIONS_COLUMN_ID));
+                int order_id = Integer.parseInt(req.getParameter(Constants.ORDERPOSITIONS_COLUMN_ORDERID));
+                int product_id = Integer.parseInt(req.getParameter(Constants.ORDERPOSITIONS_COLUMN_PRODUCTID));
+                String product_name = req.getParameter(Constants.ORDERPOSITIONS_COLUMN_PRODUCTNAME);
+                int price = Integer.parseInt(req.getParameter(Constants.ORDERPOSITIONS_COLUMN_PRICE));
+                int quantity = Integer.parseInt(req.getParameter(Constants.ORDERPOSITIONS_COLUMN_QUANTITY));
+                // TODO: validation
+                burgerUserService.updatePosition(new OrderPositionModel(id, order_id, product_id, product_name, price, quantity));
+                resp.sendRedirect("/");
                 return;
             }
             return;

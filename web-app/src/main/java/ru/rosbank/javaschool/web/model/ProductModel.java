@@ -18,13 +18,13 @@ public class ProductModel {
     private String description;
     private String category;
 
-    public ProductModel (String name, int price, int quantity, String imageUrl, String description) {
+    public ProductModel (String name, int price, int quantity, String imageUrl, String description, String category) {
         this.name = name;
         this.price = price;
         this.quantity = quantity;
         this.imageUrl = imageUrl;
         this.description = description;
-        this.category = Constants.OTHER_CATEGORY;
+        this.category = category;
     }
 }
 

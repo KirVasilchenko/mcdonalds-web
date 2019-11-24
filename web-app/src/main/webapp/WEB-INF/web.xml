@@ -8,17 +8,23 @@
         <servlet-class>ru.rosbank.javaschool.web.servlet.FrontServlet</servlet-class>
         <load-on-startup>1</load-on-startup>
     </servlet>
+    <servlet>
+        <servlet-name>test</servlet-name>
+        <servlet-class>ru.rosbank.javaschool.web.servlet.TestServlet</servlet-class>
+    </servlet>
 
-    <!-- mapping - привязка обработчика к определённому URL-->
     <servlet-mapping>
         <servlet-name>front</servlet-name>
         <url-pattern>/</url-pattern>
     </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>test</servlet-name>
+        <url-pattern>/test</url-pattern>
+    </servlet-mapping>
 
-
-<!--    <error-page>-->
-<!--        <exception-type>java.lang.Exception</exception-type>-->
-<!--        <location>/WEB-INF/error.jsp</location>-->
-<!--    </error-page>-->
+    <!--    <error-page>-->
+    <!--        <exception-type>java.lang.Exception</exception-type>-->
+    <!--        <location>/WEB-INF/error.jsp</location>-->
+    <!--    </error-page>-->
 
 </web-app>

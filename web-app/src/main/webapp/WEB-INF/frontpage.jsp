@@ -24,6 +24,7 @@
     <% for (OrderPositionModel model: positions) { %>
     <p><%= model %></p>
     <% } %>
+  <p><a href="/admin">Admin window</a></p>
 
 
   <div class="row">
@@ -34,6 +35,7 @@
         <div class="card-body">
           <h5 class="card-title"><%= item.getName() %>
           </h5>
+          <a href="<%= request.getContextPath() %>/more?id=<%= item.getId()%>" class="btn btn-primary">More</a>
           <ul class="list-group list-group-flush">
             <li class="list-group-item">Price: <%= item.getPrice() %></li>
           </ul>

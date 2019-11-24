@@ -17,17 +17,20 @@
 
 <div class="container">
   <h1>Dashboard</h1>
+  <h2><a href="/">Back to menu</a></h2>
 
 
   <% for (ProductModel item : (List<ProductModel>) request.getAttribute(Constants.ITEMS)) { %>
   <div class="card" style="width: 18rem;">
-    <img src="..." class="card-img-top" alt="...">
+    <img src="<%= item.getImageUrl() %>" class="card-img-top" alt="...">
     <div class="card-body">
       <h5 class="card-title"><%= item.getName() %>
       </h5>
       <ul class="list-group list-group-flush">
         <li class="list-group-item">Price: <%= item.getPrice() %></li>
         <li class="list-group-item">Quantity: <%= item.getQuantity() %></li>
+        <li class="list-group-item">Description: <%= item.getDescription() %></li>
+        <li class="list-group-item">Category: <%= item.getCategory() %></li>
       </ul>
       <a href="<%= request.getContextPath() %>/admin/edit?id=<%= item.getId()%>" class="btn btn-primary">Edit</a>
     </div>
@@ -52,6 +55,18 @@
       <label for="quantity">Product Quantity</label>
       <input type="number" min="0" id="quantity" name="quantity">
     </div>
+    <div class="form group">
+      <label for="image">Product Image URL</label>
+      <input type="text" id="image" name="image">
+    </div>
+    <div class="form group">
+      <label for="description">Product Description</label>
+      <input type="text" id="description" name="description">
+    </div>
+    <div class="form group">
+      <label for="category">Product Category</label>
+      <input type="text" id="category" name="category">
+    </div>
     <button class="btn btn-primary">Add</button>
   </form>
   <% } %>
@@ -73,6 +88,18 @@
     <div class="form group">
       <label for="quantity">Product Quantity</label>
       <input type="number" min="0" id="quantity" name="quantity" value="<%= item.getQuantity() %>">
+    </div>
+    <div class="form group">
+      <label for="image">Product Image URL</label>
+      <input type="text" id="image" name="image">
+    </div>
+    <div class="form group">
+      <label for="description">Product Description</label>
+      <input type="text" id="description" name="description">
+    </div>
+    <div class="form group">
+      <label for="category">Product Category</label>
+      <input type="text" id="category" name="category">
     </div>
     <button class="btn btn-primary">Save</button>
   </form>

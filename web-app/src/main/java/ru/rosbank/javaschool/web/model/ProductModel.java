@@ -4,6 +4,7 @@ package ru.rosbank.javaschool.web.model;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import ru.rosbank.javaschool.web.constant.Constants;
 
 @Data
 @NoArgsConstructor
@@ -23,7 +24,7 @@ public class ProductModel {
         this.quantity = quantity;
         this.imageUrl = imageUrl;
         this.description = description;
-        this.category = "others";
+        this.category = Constants.OTHER_CATEGORY;
     }
 }
 

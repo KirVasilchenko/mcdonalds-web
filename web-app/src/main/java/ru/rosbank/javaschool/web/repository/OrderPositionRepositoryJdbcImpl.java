@@ -3,6 +3,7 @@ package ru.rosbank.javaschool.web.repository;
 
 import ru.rosbank.javaschool.util.RowMapper;
 import ru.rosbank.javaschool.util.SQLLib;
+import ru.rosbank.javaschool.web.constant.Constants;
 import ru.rosbank.javaschool.web.exception.DataAccessException;
 import ru.rosbank.javaschool.web.model.OrderPositionModel;
 import ru.rosbank.javaschool.web.model.ProductModel;
@@ -19,12 +20,12 @@ public class OrderPositionRepositoryJdbcImpl implements OrderPositionRepository 
     private final DataSource ds;
     private final SQLLib template;
     private final RowMapper<OrderPositionModel> mapper = rs -> new OrderPositionModel(
-            rs.getInt("id"),
-            rs.getInt("order_id"),
-            rs.getInt("product_id"),
-            rs.getString("product_name"),
-            rs.getInt("price"),
-            rs.getInt("quantity")
+            rs.getInt(Constants.ORDERPOSITIONS_COLUMN_ID),
+            rs.getInt(Constants.ORDERPOSITIONS_COLUMN_ORDERID),
+            rs.getInt(Constants.ORDERPOSITIONS_COLUMN_PRODUCTID),
+            rs.getString(Constants.ORDERPOSITIONS_COLUMN_PRODUCTNAME),
+            rs.getInt(Constants.ORDERPOSITIONS_COLUMN_PRICE),
+            rs.getInt(Constants.ORDERPOSITIONS_COLUMN_QUANTITY)
     );
 
     public OrderPositionRepositoryJdbcImpl(DataSource ds, SQLLib template) {

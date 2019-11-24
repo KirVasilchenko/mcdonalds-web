@@ -3,6 +3,7 @@ package ru.rosbank.javaschool.web.repository;
 
 import ru.rosbank.javaschool.util.SQLLib;
 import ru.rosbank.javaschool.util.RowMapper;
+import ru.rosbank.javaschool.web.constant.Constants;
 import ru.rosbank.javaschool.web.exception.DataAccessException;
 import ru.rosbank.javaschool.web.model.ProductModel;
 
@@ -15,13 +16,13 @@ public class ProductRepositoryJdbcImpl implements ProductRepository {
     private final DataSource ds;
     private final SQLLib template;
     private final RowMapper<ProductModel> mapper = rs -> new ProductModel(
-            rs.getInt("id"),
-            rs.getString("name"),
-            rs.getInt("price"),
-            rs.getInt("quantity"),
-            rs.getString("image"),
-            rs.getString("description"),
-            rs.getString("category")
+            rs.getInt(Constants.PRODUCTS_COLUMN_ID),
+            rs.getString(Constants.PRODUCTS_COLUMN_NAME),
+            rs.getInt(Constants.PRODUCTS_COLUMN_PRICE),
+            rs.getInt(Constants.PRODUCTS_COLUMN_QUANTITY),
+            rs.getString(Constants.PRODUCTS_COLUMN_IMAGE),
+            rs.getString(Constants.PRODUCTS_COLUMN_DESCRIPTION),
+            rs.getString(Constants.PRODUCTS_COLUMN_CATEGORY)
     );
 
 
@@ -90,7 +91,6 @@ public class ProductRepositoryJdbcImpl implements ProductRepository {
 
     @Override
     public void save(ProductModel model) {
-        //TODO: probably we need something here for different categories.
         try {
             if (model.getId() == 0) {
                 int id = template.<Integer>updateForId(ds, "INSERT INTO products(name, price, quantity, image, description, category) VALUES (?, ?, ?, ?, ?, ?);", stmt -> {

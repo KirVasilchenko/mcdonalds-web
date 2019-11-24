@@ -25,7 +25,6 @@ public class BurgerUserService {
     return productRepository.getById(id).orElseThrow(NotFoundException::new);
   }
 
-  // TODO: выяснить время работы сессии в Tomcat
   public int createOrder() {
     OrderModel model = new OrderModel(0, "", "", "");
     orderRepository.save(model);

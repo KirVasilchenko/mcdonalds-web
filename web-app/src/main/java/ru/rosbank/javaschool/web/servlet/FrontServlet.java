@@ -34,7 +34,6 @@ public class FrontServlet extends HttpServlet {
     // Lookup - самостоятельно ищем зависимости
     // JNDI
     try {
-      // TODO: неплохо бы: чтобы это было автоматически
       InitialContext initialContext = new InitialContext();
       DataSource dataSource = (DataSource) initialContext.lookup("java:/comp/env/jdbc/db");
       SQLLib sqlTemplate = new SQLLib();
@@ -58,6 +57,18 @@ public class FrontServlet extends HttpServlet {
 
   @Override
   protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    String rootUrl = req.getContextPath().isEmpty() ? "/" : req.getContextPath();
+    String url = req.getRequestURI().substring(req.getContextPath().length());
+    if (req.getMethod().equals("GET")) { doGet(req, resp); }
+    if (req.getMethod().equals("POST")) { doPost(req, resp); }
+
+
+  }
+
+
+
+  @Override
+  protected void doGet (HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
     // будем перенаправлять запрос
     // resp.getWriter().write("...");
     String rootUrl = req.getContextPath().isEmpty() ? "/" : req.getContextPath();
@@ -67,13 +78,45 @@ public class FrontServlet extends HttpServlet {
     if (url.startsWith("/admin")) {
       if (url.equals("/admin")) {
         // TODO: work with admin panel
-        if (req.getMethod().equals("GET")) {
           req.setAttribute(Constants.ITEMS, burgerAdminService.getAll());
           req.getRequestDispatcher("/WEB-INF/admin/frontpage.jsp").forward(req, resp);
           return;
+      }
+      if (url.startsWith("/admin/edit")) {
+          // ?id=value
+          int id = Integer.parseInt(req.getParameter("id"));
+          req.setAttribute(Constants.ITEM, burgerAdminService.getById(id));
+          req.setAttribute(Constants.ITEMS, burgerAdminService.getAll());
+          req.getRequestDispatcher("/WEB-INF/admin/frontpage.jsp").forward(req, resp);
+          return;
+      }
+      return;
+    }
+    if (url.equals("/")) {
+        HttpSession session = req.getSession();
+        if (session.isNew()) {
+          int orderId = burgerUserService.createOrder();
+          session.setAttribute("order-id", orderId);
         }
+        int orderId = (Integer) session.getAttribute("order-id");
+        req.setAttribute("ordered-items", burgerUserService.getAllOrderPosition(orderId));
+        req.setAttribute(Constants.ITEMS, burgerUserService.getAll());
+        req.getRequestDispatcher("/WEB-INF/frontpage.jsp").forward(req, resp);
+        return;
+    }
+  }
 
-        if (req.getMethod().equals("POST")) {
+
+  @Override
+  protected void doPost (HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+// будем перенаправлять запрос
+    // resp.getWriter().write("...");
+    String rootUrl = req.getContextPath().isEmpty() ? "/" : req.getContextPath();
+    String url = req.getRequestURI().substring(req.getContextPath().length());
+    // routing
+    // в зависимости от url'а вызывать нужные обработчики
+    if (url.startsWith("/admin")) {
+      if (url.equals("/admin")) {
           // getParameter - POST (BODY FORM)
           int id = Integer.parseInt(req.getParameter("id"));
           String name = req.getParameter("name");
@@ -83,58 +126,105 @@ public class FrontServlet extends HttpServlet {
           burgerAdminService.save(new ProductModel(id, name, price, quantity, "url", "desc", "others"));
           resp.sendRedirect(url);
           return;
-        }
       }
-
-      if (url.startsWith("/admin/edit")) {
-        if (req.getMethod().equals("GET")) {
-          // ?id=value
-          int id = Integer.parseInt(req.getParameter("id"));
-          req.setAttribute(Constants.ITEM, burgerAdminService.getById(id));
-          req.setAttribute(Constants.ITEMS, burgerAdminService.getAll());
-          req.getRequestDispatcher("/WEB-INF/admin/frontpage.jsp").forward(req, resp);
-          return;
-        }
-      }
-
       return;
     }
-
     if (url.equals("/")) {
-
-      if (req.getMethod().equals("GET")) {
         HttpSession session = req.getSession();
         if (session.isNew()) {
           int orderId = burgerUserService.createOrder();
           session.setAttribute("order-id", orderId);
         }
-
-        int orderId = (Integer) session.getAttribute("order-id");
-        req.setAttribute("ordered-items", burgerUserService.getAllOrderPosition(orderId));
-        req.setAttribute(Constants.ITEMS, burgerUserService.getAll());
-        req.getRequestDispatcher("/WEB-INF/frontpage.jsp").forward(req, resp);
-        return;
-      }
-      if (req.getMethod().equals("POST")) {
-        HttpSession session = req.getSession();
-        if (session.isNew()) {
-          int orderId = burgerUserService.createOrder();
-          session.setAttribute("order-id", orderId);
-        }
-
         int orderId = (Integer) session.getAttribute("order-id");
         int id = Integer.parseInt(req.getParameter("id"));
         int quantity = Integer.parseInt(req.getParameter("quantity"));
-
         burgerUserService.order(orderId, id, quantity);
         resp.sendRedirect(url);
         return;
-      }
     }
   }
+
 
   @Override
   public void destroy() {
     log("destroy");
   }
 }
+
+
+//  @Override
+//  protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+//    // будем перенаправлять запрос
+//    // resp.getWriter().write("...");
+//    String rootUrl = req.getContextPath().isEmpty() ? "/" : req.getContextPath();
+//    String url = req.getRequestURI().substring(req.getContextPath().length());
+//    // routing
+//    // в зависимости от url'а вызывать нужные обработчики
+//    if (url.startsWith("/admin")) {
+//      if (url.equals("/admin")) {
+//        // TODO: work with admin panel
+//        if (req.getMethod().equals("GET")) {
+//          req.setAttribute(Constants.ITEMS, burgerAdminService.getAll());
+//          req.getRequestDispatcher("/WEB-INF/admin/frontpage.jsp").forward(req, resp);
+//          return;
+//        }
+//
+//        if (req.getMethod().equals("POST")) {
+//          // getParameter - POST (BODY FORM)
+//          int id = Integer.parseInt(req.getParameter("id"));
+//          String name = req.getParameter("name");
+//          int price = Integer.parseInt(req.getParameter("price"));
+//          int quantity = Integer.parseInt(req.getParameter("quantity"));
+//          // TODO: validation
+//          burgerAdminService.save(new ProductModel(id, name, price, quantity, "url", "desc", "others"));
+//          resp.sendRedirect(url);
+//          return;
+//        }
+//      }
+//
+//      if (url.startsWith("/admin/edit")) {
+//        if (req.getMethod().equals("GET")) {
+//          // ?id=value
+//          int id = Integer.parseInt(req.getParameter("id"));
+//          req.setAttribute(Constants.ITEM, burgerAdminService.getById(id));
+//          req.setAttribute(Constants.ITEMS, burgerAdminService.getAll());
+//          req.getRequestDispatcher("/WEB-INF/admin/frontpage.jsp").forward(req, resp);
+//          return;
+//        }
+//      }
+//
+//      return;
+//    }
+//
+//    if (url.equals("/")) {
+//
+//      if (req.getMethod().equals("GET")) {
+//        HttpSession session = req.getSession();
+//        if (session.isNew()) {
+//          int orderId = burgerUserService.createOrder();
+//          session.setAttribute("order-id", orderId);
+//        }
+//
+//        int orderId = (Integer) session.getAttribute("order-id");
+//        req.setAttribute("ordered-items", burgerUserService.getAllOrderPosition(orderId));
+//        req.setAttribute(Constants.ITEMS, burgerUserService.getAll());
+//        req.getRequestDispatcher("/WEB-INF/frontpage.jsp").forward(req, resp);
+//        return;
+//      }
+//      if (req.getMethod().equals("POST")) {
+//        HttpSession session = req.getSession();
+//        if (session.isNew()) {
+//          int orderId = burgerUserService.createOrder();
+//          session.setAttribute("order-id", orderId);
+//        }
+//
+//        int orderId = (Integer) session.getAttribute("order-id");
+//        int id = Integer.parseInt(req.getParameter("id"));
+//        int quantity = Integer.parseInt(req.getParameter("quantity"));
+//
+//        burgerUserService.order(orderId, id, quantity);
+//        resp.sendRedirect(url);
+//        return;
+//      }
+//    }
+//  }

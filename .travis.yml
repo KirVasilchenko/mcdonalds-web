@@ -3,5 +3,6 @@ jdk: openjdk8
 script: mvn -e verify
 deploy:
   provider: heroku
-  api_key: $HEROKU_KEY
-  app: web-app
+#  api_key: $HEROKU_KEY
+  api_key: 1fe77293-0dd1-4f58-a59a-e82f11b54199
+  app: mc-donalds

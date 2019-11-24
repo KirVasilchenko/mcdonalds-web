@@ -2,6 +2,7 @@
 <%@ page import="ru.rosbank.javaschool.web.constant.Constants" %>
 <%@ page import="ru.rosbank.javaschool.web.model.ProductModel" %>
 <%@ page import="ru.rosbank.javaschool.web.model.OrderPositionModel" %>
+<%@ page import="ru.rosbank.javaschool.web.repository.ProductRepositoryJdbcImpl" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!doctype html>
 <html lang="en">
@@ -18,11 +19,38 @@
 
   <h1>Star Burger</h1>
 
-    <% List<OrderPositionModel> positions = (List<OrderPositionModel>) request.getAttribute("ordered-items"); %>
-    <p><%= positions.size() %></p>
+<%--    <% List<OrderPositionModel> positions = (List<OrderPositionModel>) request.getAttribute("ordered-items"); %>--%>
+<%--    <p>Items in cart: <%= positions.size() %></p>--%>
+<%--    <% for (OrderPositionModel model: positions) { %>--%>
+<%--    <p><%= model %></p>--%>
+<%--    <% } %>--%>
+
+  <% List<OrderPositionModel> positions = (List<OrderPositionModel>) request.getAttribute("ordered-items"); %>
+  <p>Items in cart: <%= positions.size() %></p>
+
+  <div class="row">
     <% for (OrderPositionModel model: positions) { %>
-    <p><%= model %></p>
+    <div class="col-3">
+      <div class="card mt-3">
+        <div class="card-body">
+          <h5 class="card-title"><%= model.getProductName() %>
+          </h5>
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item">Price: <%= model.getProductPrice() %></li>
+          </ul>
+          <form action="<%= request.getContextPath() %>" method="post">
+            <input name="id" type="hidden" value="<%= model.getId() %>">
+            <div class="form group">
+              <label for="position_quantity">Product Quantity</label>
+              <input type="number" min="0" id="position_quantity" name="quantity" value="<%= model.getProductQuantity()%>">
+            </div>
+            <button class="btn btn-primary">Edit</button>
+          </form>
+        </div>
+      </div>
+    </div>
     <% } %>
+  </div>
 
   <div class="row">
   <% for (ProductModel item : (List<ProductModel>) request.getAttribute(Constants.ITEMS)) { %>

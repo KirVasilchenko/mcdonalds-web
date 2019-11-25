@@ -5,7 +5,7 @@ import ru.rosbank.javaschool.util.SQLLib;
 import ru.rosbank.javaschool.util.RowMapper;
 import ru.rosbank.javaschool.web.constant.Constants;
 import ru.rosbank.javaschool.web.exception.DataAccessException;
-import ru.rosbank.javaschool.web.model.ProductModel;
+import ru.rosbank.javaschool.web.model.*;
 
 import javax.sql.DataSource;
 import java.sql.SQLException;
@@ -121,6 +121,109 @@ public class ProductRepositoryJdbcImpl implements ProductRepository {
             throw new DataAccessException(e);
         }
     }
+
+    public void createBurger(BurgerModel model) {
+        try {
+            template.update(ds, "INSERT INTO burgers(product_id, cutlet_meat, cutlet_count) VALUES (?, ?, ?);", stmt -> {
+                int nextIndex = 1;
+                stmt.setInt(nextIndex++, model.getId());
+                stmt.setString(nextIndex++, model.getCutletMeat());
+                stmt.setInt(nextIndex++, model.getCutletCount());
+                return stmt;
+            });
+        } catch (SQLException e) {
+            throw new DataAccessException(e);
+        }
+    }
+    public void updateBurger(BurgerModel model) {
+        try {
+            template.update(ds, "UPDATE burgers SET cutlet_meat = ?, cutlet_count = ? WHERE product_id = ?;", stmt -> {
+                int nextIndex = 1;
+                stmt.setString(nextIndex++, model.getCutletMeat());
+                stmt.setInt(nextIndex++, model.getCutletCount());
+                stmt.setInt(nextIndex++, model.getId());
+                return stmt;
+            });
+        } catch (SQLException e) {
+            throw new DataAccessException(e);
+        }
+    }
+
+    public void createDessert(DessertModel model) {
+        try {
+            template.update(ds, "INSERT INTO desserts(product_id, syrup) VALUES (?, ?);", stmt -> {
+                int nextIndex = 1;
+                stmt.setInt(nextIndex++, model.getId());
+                stmt.setString(nextIndex++, model.getSyrup());
+                return stmt;
+            });
+        } catch (SQLException e) {
+            throw new DataAccessException(e);
+        }
+    }
+    public void updateDessert(DessertModel model) {
+        try {
+            template.update(ds, "UPDATE desserts SET syrup = ? WHERE product_id = ?;", stmt -> {
+                int nextIndex = 1;
+                stmt.setString(nextIndex++, model.getSyrup());
+                stmt.setInt(nextIndex++, model.getId());
+                return stmt;
+            });
+        } catch (SQLException e) {
+            throw new DataAccessException(e);
+        }
+    }
+
+    public void createDrink(DrinkModel model) {
+        try {
+            template.update(ds, "INSERT INTO drinks(product_id, volume_in_ml) VALUES (?, ?);", stmt -> {
+                int nextIndex = 1;
+                stmt.setInt(nextIndex++, model.getId());
+                stmt.setInt(nextIndex++, model.getVolumeInMl());
+                return stmt;
+            });
+        } catch (SQLException e) {
+            throw new DataAccessException(e);
+        }
+    }
+    public void updateDrink(DrinkModel model) {
+        try {
+            template.update(ds, "UPDATE desserts SET volume_in_ml = ? WHERE product_id = ?;", stmt -> {
+                int nextIndex = 1;
+                stmt.setInt(nextIndex++, model.getVolumeInMl());
+                stmt.setInt(nextIndex++, model.getId());
+                return stmt;
+            });
+        } catch (SQLException e) {
+            throw new DataAccessException(e);
+        }
+    }
+
+    public void createPotato(PotatoModel model) {
+        try {
+            template.update(ds, "INSERT INTO potatoes(product_id, weight_in_g) VALUES (?, ?);", stmt -> {
+                int nextIndex = 1;
+                stmt.setInt(nextIndex++, model.getId());
+                stmt.setInt(nextIndex++, model.getWeightInG());
+                return stmt;
+            });
+        } catch (SQLException e) {
+            throw new DataAccessException(e);
+        }
+    }
+    public void updatePotato(PotatoModel model) {
+        try {
+            template.update(ds, "UPDATE potatoes SET weight_in_g = ? WHERE product_id = ?;", stmt -> {
+                int nextIndex = 1;
+                stmt.setInt(nextIndex++, model.getWeightInG());
+                stmt.setInt(nextIndex++, model.getId());
+                return stmt;
+            });
+        } catch (SQLException e) {
+            throw new DataAccessException(e);
+        }
+    }
+
 
     @Override
     public void removeById(int id) {

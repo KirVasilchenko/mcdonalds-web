@@ -5,13 +5,13 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>sql-lib</artifactId>
-    <version>1.2.0</version>
+    <version>1.2.1</version>
     <packaging>jar</packaging>
 
     <parent>
         <groupId>ru.rosbank.javaschool</groupId>
         <artifactId>mcdonalds-web</artifactId>
-        <version>1.2.0</version>
+        <version>1.2.1</version>
     </parent>
 
 </project>

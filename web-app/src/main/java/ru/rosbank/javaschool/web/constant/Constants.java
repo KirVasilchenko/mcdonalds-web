@@ -1,7 +1,6 @@
 package ru.rosbank.javaschool.web.constant;
 
 public class Constants {
-//  psfs
   public static final String ITEM = "item";
   public static final String PAGE_TITLE = "page-title";
   public static final String ITEMS = "items";
@@ -17,6 +16,10 @@ public class Constants {
   public static final String PRODUCTS_COLUMN_DESCRIPTION = "description";
   public static final String PRODUCTS_COLUMN_CATEGORY = "category";
 
+  public static final String BURGERS_CATEGORY = "burgers";
+  public static final String POTATOES_CATEGORY = "potatoes";
+  public static final String DRINKS_CATEGORY = "drinks";
+  public static final String DESSERTS_CATEGORY = "desserts";
   public static final String OTHER_CATEGORY = "others";
 
   public static final String ORDERPOSITIONS_COLUMN_ID = "id";
@@ -39,6 +42,12 @@ public class Constants {
   public static final String BURGERSERVICE_ATTRIBUTE_QUANTITY = "quantity";
   public static final String BURGERSERVICE_ATTRIBUTE_ORDEREDITEMS = "ordered-items";
 
+  public static final String BURGERS_COLUMN_CUTLETMEAT = "cutlet_meat";
+  public static final String BURGERS_COLUMN_CUTLETCOUNT = "cutlet_count";
+
+  public static final String POTATOES_COLUMN_WEIGHTING = "weight_in_g";
+  public static final String DRINKS_COLUMN_VOLUMEINML = "volume_in_ml";
+  public static final String DESSERTS_COLUMN_SYRUP = "syrup";
 
 
   private Constants() {}

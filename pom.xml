@@ -6,12 +6,12 @@
 
     <groupId>ru.rosbank.javaschool</groupId>
     <artifactId>mcdonalds-web</artifactId>
-    <version>1.2.1</version>
+    <version>1.3.0</version>
     <packaging>pom</packaging>
 
     <properties>
-        <sql-lib.version>1.2.1</sql-lib.version>
-        <web-app.version>1.2.1</web-app.version>
+        <sql-lib.version>1.3.0</sql-lib.version>
+        <web-app.version>1.3.0</web-app.version>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -23,10 +23,6 @@
         <sqlite-jdbc.version>3.28.0</sqlite-jdbc.version>
     </properties>
 
-    <!--  dependencyManagement  -->
-    <!--  в родительском POM'е прописываются версии всех зависимостей, используемых в проекте  -->
-    <!--  тогда в дочерних не нужно будет их указывать  -->
-    <!--  dependencyManagement не добавляет зависимостей, а только определяет  -->
     <dependencyManagement>
         <dependencies>
             <dependency>

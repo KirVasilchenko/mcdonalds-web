@@ -2,7 +2,6 @@ package ru.rosbank.javaschool.web.servlet;
 
 import ru.rosbank.javaschool.util.SQLLib;
 import ru.rosbank.javaschool.web.constant.Constants;
-import ru.rosbank.javaschool.web.model.BurgerModel;
 import ru.rosbank.javaschool.web.model.OrderPositionModel;
 import ru.rosbank.javaschool.web.model.ProductModel;
 import ru.rosbank.javaschool.web.repository.*;
@@ -44,8 +43,15 @@ public class FrontServlet extends HttpServlet {
     }
 
     private void insertInitialData(ProductRepository productRepository) {
-        productRepository.save(new ProductModel("Burger 3", 100, 1, Constants.NO_PHOTO, Constants.DESCRIPTION_BY_DEFAULT, "burgers"));
-        productRepository.save(new ProductModel("Burger 4", 200, 2, Constants.NO_PHOTO, Constants.DESCRIPTION_BY_DEFAULT, "burgers"));
+        productRepository.save(new ProductModel("Hamburger", 50, 10, "https://sun9-37.userapi.com/c857232/v857232743/615d4/5G3cUiu-tLQ.jpg", "Classic burger.", "burgers"));
+        productRepository.save(new ProductModel("Cheeseburger", 52, 2, "https://sun9-22.userapi.com/c857232/v857232743/615dc/okt91MwUqx0.jpg", "Classic burger with cheese.", "burgers"));
+        productRepository.save(new ProductModel("French fries S", 49, 1, "https://sun9-3.userapi.com/c855320/v855320743/185929/W-YH81z3OKY.jpg", "Tasty and crispy, you'd like it.", "potatoes"));
+        productRepository.save(new ProductModel("French fries M", 55, 1, "https://sun9-40.userapi.com/c855320/v855320743/185931/sZGlzfpFwOY.jpg", "Tasty and crispy, you'd like it.", "potatoes"));
+        productRepository.save(new ProductModel("French fries L", 75, 1, "https://sun9-15.userapi.com/c855320/v855320743/185939/ET7jIhid0LU.jpg", "Tasty and crispy, you'd like it.", "potatoes"));
+        productRepository.save(new ProductModel("Mojito 0,4", 150, 1, "https://sun9-13.userapi.com/c857232/v857232743/615c4/HMz79ybTs1Q.jpg", "Cold and energizing, classic flavor of Cuba. Be careful: non-alcohol drink.", "drinks"));
+        productRepository.save(new ProductModel("Raspberry Mojito 0,4", 150, 1, "https://sun9-40.userapi.com/c857232/v857232743/615fe/EC_-ZabNhgg.jpg", "Cold and energizing, classic flavor of Cuba with juicy raspberries. Be careful: non-alcohol drink.", "drinks"));
+        productRepository.save(new ProductModel("Cheesecake New York", 175, 1, "https://sun9-15.userapi.com/c857232/v857232743/615f6/dM3rdcqArR8.jpg", "Classic and famous cheesecake.", "desserts"));
+        productRepository.save(new ProductModel("Chocolate Cheesecake", 180, 1, "https://sun9-64.userapi.com/c857232/v857232743/615ee/GJgQHtj_r8k.jpg", "Classic and famous cheesecake with chocolate syrup on top.", "desserts"));
     }
 
     @Override
@@ -122,7 +128,6 @@ public class FrontServlet extends HttpServlet {
             req.setAttribute(Constants.BURGERSERVICE_ATTRIBUTE_ORDEREDITEMS, burgerUserService.getAllOrderPosition(orderId));
             req.setAttribute(Constants.ITEMS, burgerUserService.getAll());
             req.getRequestDispatcher("/WEB-INF/frontpage.jsp").forward(req, resp);
-            return;
         }
     }
 
@@ -141,21 +146,21 @@ public class FrontServlet extends HttpServlet {
                 String category = req.getParameter(Constants.PRODUCTS_COLUMN_CATEGORY);
                 // TODO: validation
                 burgerAdminService.save(new ProductModel(id, name, price, quantity, image, description, category));
-                if (category == "burgers") {
-                    String cutlet_meat = req.getParameter("cutlet_meat");
-                    int cutlet_count = Integer.parseInt(req.getParameter("cutlet_count"));
+                if (category.equals(Constants.BURGERS_CATEGORY)) {
+                    String cutlet_meat = req.getParameter(Constants.BURGERS_COLUMN_CUTLETMEAT);
+                    int cutlet_count = Integer.parseInt(req.getParameter(Constants.BURGERS_COLUMN_CUTLETCOUNT));
                     burgerAdminService.saveBurger(id, cutlet_meat, cutlet_count);
                 }
-                if (category == "potatoes") {
-                    int weight = Integer.parseInt(req.getParameter("weight_in_g"));
+                if (category.equals(Constants.POTATOES_CATEGORY)) {
+                    int weight = Integer.parseInt(req.getParameter(Constants.POTATOES_COLUMN_WEIGHTING));
                     burgerAdminService.savePotato(id, weight);
                 }
-                if (category == "drinks") {
-                    int volume = Integer.parseInt(req.getParameter("volume_in_ml"));
+                if (category.equals(Constants.DRINKS_CATEGORY)) {
+                    int volume = Integer.parseInt(req.getParameter(Constants.DRINKS_COLUMN_VOLUMEINML));
                     burgerAdminService.saveDrink(id, volume);
                 }
-                if (category == "desserts") {
-                    String syrup = req.getParameter("syrup");
+                if (category.equals(Constants.DESSERTS_CATEGORY)) {
+                    String syrup = req.getParameter(Constants.DESSERTS_COLUMN_SYRUP);
                     burgerAdminService.saveDessert(id, syrup);
                 }
                 resp.sendRedirect(url);
@@ -188,7 +193,6 @@ public class FrontServlet extends HttpServlet {
             int quantity = Integer.parseInt(req.getParameter(Constants.BURGERSERVICE_ATTRIBUTE_QUANTITY));
             burgerUserService.order(orderId, id, quantity);
             resp.sendRedirect(url);
-            return;
         }
     }
 

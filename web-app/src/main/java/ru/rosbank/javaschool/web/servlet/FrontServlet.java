@@ -144,25 +144,7 @@ public class FrontServlet extends HttpServlet {
                 String image = req.getParameter(Constants.PRODUCTS_COLUMN_IMAGE);
                 String description = req.getParameter(Constants.PRODUCTS_COLUMN_DESCRIPTION);
                 String category = req.getParameter(Constants.PRODUCTS_COLUMN_CATEGORY);
-                // TODO: validation
                 burgerAdminService.save(new ProductModel(id, name, price, quantity, image, description, category));
-                if (category.equals(Constants.BURGERS_CATEGORY)) {
-                    String cutlet_meat = req.getParameter(Constants.BURGERS_COLUMN_CUTLETMEAT);
-                    int cutlet_count = Integer.parseInt(req.getParameter(Constants.BURGERS_COLUMN_CUTLETCOUNT));
-                    burgerAdminService.saveBurger(id, cutlet_meat, cutlet_count);
-                }
-                if (category.equals(Constants.POTATOES_CATEGORY)) {
-                    int weight = Integer.parseInt(req.getParameter(Constants.POTATOES_COLUMN_WEIGHTING));
-                    burgerAdminService.savePotato(id, weight);
-                }
-                if (category.equals(Constants.DRINKS_CATEGORY)) {
-                    int volume = Integer.parseInt(req.getParameter(Constants.DRINKS_COLUMN_VOLUMEINML));
-                    burgerAdminService.saveDrink(id, volume);
-                }
-                if (category.equals(Constants.DESSERTS_CATEGORY)) {
-                    String syrup = req.getParameter(Constants.DESSERTS_COLUMN_SYRUP);
-                    burgerAdminService.saveDessert(id, syrup);
-                }
                 resp.sendRedirect(url);
                 return;
             }

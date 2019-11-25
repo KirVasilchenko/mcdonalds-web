@@ -1,6 +1,6 @@
 <%@ page import="java.util.List" %>
 <%@ page import="ru.rosbank.javaschool.web.constant.Constants" %>
-<%@ page import="ru.rosbank.javaschool.web.model.ProductModel" %>
+<%@ page import="ru.rosbank.javaschool.web.model.*" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%-- ! + Tab - emmet --%>
 <!doctype html>
@@ -32,7 +32,7 @@
         <li class="list-group-item">Description: <%= item.getDescription() %></li>
         <li class="list-group-item">Category: <%= item.getCategory() %></li>
       </ul>
-      <a href="<%= request.getContextPath() %>/admin/edit?id=<%= item.getId()%>" class="btn btn-primary">Edit</a>
+      <p><a href="<%= request.getContextPath() %>/admin/edit?id=<%= item.getId()%>" class="btn btn-primary">Edit</a></p>
     </div>
   </div>
   <% } %>
@@ -42,9 +42,7 @@
   <form action="<%= request.getContextPath() %>/admin" method="post">
     <input name="id" type="hidden" value="0">
     <div class="form group">
-      <%-- for="id", id должен быть у input --%>
       <label for="name">Product Name</label>
-      <%-- name="key" - потом по этому ключу можно будет доставать данные из запроса --%>
       <input type="text" id="name" name="name">
     </div>
     <div class="form group">
@@ -76,9 +74,7 @@
   <form action="<%= request.getContextPath() %>/admin" method="post">
     <input name="id" type="hidden" value="<%= item.getId() %>">
     <div class="form group">
-      <%-- for="id", id должен быть у input --%>
       <label for="name">Product Name</label>
-      <%-- name="key" - потом по этому ключу можно будет доставать данные из запроса --%>
       <input type="text" id="name" name="name" value="<%= item.getName() %>">
     </div>
     <div class="form group">
@@ -91,16 +87,45 @@
     </div>
     <div class="form group">
       <label for="image">Product Image URL</label>
-      <input type="text" id="image" name="image">
+      <input type="text" id="image" name="image" value="<%= item.getImageUrl() %>">
     </div>
     <div class="form group">
       <label for="description">Product Description</label>
-      <input type="text" id="description" name="description">
+      <input type="text" id="description" name="description" value="<%= item.getDescription() %>">
     </div>
     <div class="form group">
       <label for="category">Product Category</label>
-      <input type="text" id="category" name="category">
+      <input type="text" id="category" name="category" value="<%= item.getCategory() %>">
     </div>
+
+    <% if ( item.getCategory().equals("burgers") ) {%>
+    <div class="form group">
+      <label for="cutlet_meat">Cutlet Meat (use Beef, Chicken, Fish)</label>
+      <input type="text" id="cutlet_meat" name="cutlet_meat" value="">
+    </div>
+    <div class="form group">
+      <label for="cutlet_count">Cutlet Count</label>
+      <input type="number" min="0" id="cutlet_count" name="cutlet_count" min="1" value="">
+    </div>
+    <%}%>
+    <% if ( item.getCategory().equals("potatoes") ) {%>
+    <div class="form group">
+      <label for="weight_in_g">Weight, g</label>
+      <input type="number" min="0" id="weight_in_g" name="weight_in_g" min="1" value="">
+    </div>
+    <%}%>
+    <% if ( item.getCategory().equals("drinks") ) {%>
+    <div class="form group">
+      <label for="volume_in_ml">Volume, ml</label>
+      <input type="number" min="0" id="volume_in_ml" name="volume_in_ml" min="1" value="">
+    </div>
+    <%}%>
+    <% if ( item.getCategory().equals("desserts") ) {%>
+    <div class="form group">
+      <label for="syrup">Syrup Flavor</label>
+      <input type="text" id="syrup" name="syrup" value="">
+    </div>
+    <%}%>
     <button class="btn btn-primary">Save</button>
   </form>
   <% } %>

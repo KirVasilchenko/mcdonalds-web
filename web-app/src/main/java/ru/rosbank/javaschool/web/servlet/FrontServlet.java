@@ -2,6 +2,7 @@ package ru.rosbank.javaschool.web.servlet;
 
 import ru.rosbank.javaschool.util.SQLLib;
 import ru.rosbank.javaschool.web.constant.Constants;
+import ru.rosbank.javaschool.web.model.BurgerModel;
 import ru.rosbank.javaschool.web.model.OrderPositionModel;
 import ru.rosbank.javaschool.web.model.ProductModel;
 import ru.rosbank.javaschool.web.repository.*;
@@ -34,7 +35,7 @@ public class FrontServlet extends HttpServlet {
             OrderRepository orderRepository = new OrderRepositoryJdbcImpl(dataSource, sqlTemplate);
             OrderPositionRepository orderPositionRepository = new OrderPositionRepositoryJdbcImpl(dataSource, sqlTemplate);
             burgerUserService = new BurgerUserService(productRepository, orderRepository, orderPositionRepository);
-            burgerAdminService = new BurgerAdminService(productRepository, orderRepository, orderPositionRepository);
+            burgerAdminService = new BurgerAdminService(productRepository);
 
             insertInitialData(productRepository);
         } catch (NamingException e) {
@@ -45,7 +46,6 @@ public class FrontServlet extends HttpServlet {
     private void insertInitialData(ProductRepository productRepository) {
         productRepository.save(new ProductModel("Burger 3", 100, 1, Constants.NO_PHOTO, Constants.DESCRIPTION_BY_DEFAULT, "burgers"));
         productRepository.save(new ProductModel("Burger 4", 200, 2, Constants.NO_PHOTO, Constants.DESCRIPTION_BY_DEFAULT, "burgers"));
-
     }
 
     @Override
@@ -62,16 +62,15 @@ public class FrontServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String url = req.getRequestURI().substring(req.getContextPath().length());
+        if (url.startsWith("/admin/edit")) {
+            int id = Integer.parseInt(req.getParameter("id"));
+            req.setAttribute(Constants.ITEM, burgerAdminService.getById(id));
+            req.setAttribute(Constants.ITEMS, burgerAdminService.getAll());
+            req.getRequestDispatcher("/WEB-INF/admin/frontpage.jsp").forward(req, resp);
+            return;
+        }
         if (url.startsWith("/admin")) {
             if (url.equals("/admin")) {
-                // TODO: work with admin panel
-                req.setAttribute(Constants.ITEMS, burgerAdminService.getAll());
-                req.getRequestDispatcher("/WEB-INF/admin/frontpage.jsp").forward(req, resp);
-                return;
-            }
-            if (url.startsWith("/admin/edit")) {
-                int id = Integer.parseInt(req.getParameter("id"));
-                req.setAttribute(Constants.ITEM, burgerAdminService.getById(id));
                 req.setAttribute(Constants.ITEMS, burgerAdminService.getAll());
                 req.getRequestDispatcher("/WEB-INF/admin/frontpage.jsp").forward(req, resp);
                 return;
@@ -87,7 +86,6 @@ public class FrontServlet extends HttpServlet {
             req.setAttribute(Constants.PRODUCTS_COLUMN_IMAGE, model.getImageUrl());
             req.setAttribute(Constants.PRODUCTS_COLUMN_DESCRIPTION, model.getDescription());
             req.setAttribute(Constants.PRODUCTS_COLUMN_CATEGORY, model.getCategory());
-            //TODO: add category fields.
             req.getRequestDispatcher("/WEB-INF/more.jsp").forward(req, resp);
             return;
         }
@@ -143,6 +141,23 @@ public class FrontServlet extends HttpServlet {
                 String category = req.getParameter(Constants.PRODUCTS_COLUMN_CATEGORY);
                 // TODO: validation
                 burgerAdminService.save(new ProductModel(id, name, price, quantity, image, description, category));
+                if (category == "burgers") {
+                    String cutlet_meat = req.getParameter("cutlet_meat");
+                    int cutlet_count = Integer.parseInt(req.getParameter("cutlet_count"));
+                    burgerAdminService.saveBurger(id, cutlet_meat, cutlet_count);
+                }
+                if (category == "potatoes") {
+                    int weight = Integer.parseInt(req.getParameter("weight_in_g"));
+                    burgerAdminService.savePotato(id, weight);
+                }
+                if (category == "drinks") {
+                    int volume = Integer.parseInt(req.getParameter("volume_in_ml"));
+                    burgerAdminService.saveDrink(id, volume);
+                }
+                if (category == "desserts") {
+                    String syrup = req.getParameter("syrup");
+                    burgerAdminService.saveDessert(id, syrup);
+                }
                 resp.sendRedirect(url);
                 return;
             }
@@ -156,7 +171,6 @@ public class FrontServlet extends HttpServlet {
                 String product_name = req.getParameter(Constants.ORDERPOSITIONS_COLUMN_PRODUCTNAME);
                 int price = Integer.parseInt(req.getParameter(Constants.ORDERPOSITIONS_COLUMN_PRICE));
                 int quantity = Integer.parseInt(req.getParameter(Constants.ORDERPOSITIONS_COLUMN_QUANTITY));
-                // TODO: validation
                 burgerUserService.updatePosition(new OrderPositionModel(id, order_id, product_id, product_name, price, quantity));
                 resp.sendRedirect("/");
                 return;

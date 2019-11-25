@@ -12,8 +12,8 @@
     <properties>
         <sql-lib.version>1.1.2</sql-lib.version>
         <web-app.version>1.1.1</web-app.version>
-        <maven.compiler.source>1.8</maven.compiler.source>
-        <maven.compiler.target>1.8</maven.compiler.target>
+        <maven.compiler.source>11</maven.compiler.source>
+        <maven.compiler.target>11</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <javax.servlet-api.version>4.0.1</javax.servlet-api.version>
         <javax.servlet.jsp-api.version>2.3.3</javax.servlet.jsp-api.version>

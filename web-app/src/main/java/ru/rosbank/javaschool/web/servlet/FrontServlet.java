@@ -2,6 +2,7 @@ package ru.rosbank.javaschool.web.servlet;
 
 import ru.rosbank.javaschool.util.SQLLib;
 import ru.rosbank.javaschool.web.constant.Constants;
+import ru.rosbank.javaschool.web.exception.DataSourceException;
 import ru.rosbank.javaschool.web.model.OrderPositionModel;
 import ru.rosbank.javaschool.web.model.ProductModel;
 import ru.rosbank.javaschool.web.repository.*;
@@ -38,7 +39,7 @@ public class FrontServlet extends HttpServlet {
 
             insertInitialData(productRepository);
         } catch (NamingException e) {
-            e.printStackTrace();
+            throw new DataSourceException(e);
         }
     }
 

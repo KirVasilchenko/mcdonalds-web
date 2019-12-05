@@ -49,7 +49,6 @@ public class ProductRepositoryJdbcImpl implements ProductRepository {
         this.template = template;
 
         try {
-//            template.update(ds, "DROP TABLE products;");
             template.update(ds, "CREATE TABLE IF NOT EXISTS products\n" +
                     "(\n" +
                     "id          INTEGER PRIMARY KEY AUTOINCREMENT,\n" +

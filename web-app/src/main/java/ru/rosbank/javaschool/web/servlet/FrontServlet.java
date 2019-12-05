@@ -58,9 +58,11 @@ public class FrontServlet extends HttpServlet {
     protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         if (req.getMethod().equals("GET")) {
             doGet(req, resp);
+            return;
         }
         if (req.getMethod().equals("POST")) {
             doPost(req, resp);
+            return;
         }
     }
 

@@ -4,6 +4,7 @@ import ru.rosbank.javaschool.util.SQLLib;
 import ru.rosbank.javaschool.web.constant.Attributes;
 import ru.rosbank.javaschool.web.constant.Constants;
 import ru.rosbank.javaschool.web.constant.Parameters;
+import ru.rosbank.javaschool.web.constant.Paths;
 import ru.rosbank.javaschool.web.exception.DataSourceException;
 import ru.rosbank.javaschool.web.model.OrderPositionModel;
 import ru.rosbank.javaschool.web.model.ProductModel;
@@ -27,11 +28,11 @@ public class FrontServlet extends HttpServlet {
 
 
     @Override
-    public void init() throws ServletException {
+    public void init() {
         log(Constants.LOG_MESSAGE_INIT);
         try {
             InitialContext initialContext = new InitialContext();
-            DataSource dataSource = (DataSource) initialContext.lookup("java:/comp/env/jdbc/db");
+            DataSource dataSource = (DataSource) initialContext.lookup(Paths.INITIAL_CONTEXT_LOOKUP);
             SQLLib sqlTemplate = new SQLLib();
             ProductRepository productRepository = new ProductRepositoryJdbcImpl(dataSource, sqlTemplate);
             OrderRepository orderRepository = new OrderRepositoryJdbcImpl(dataSource, sqlTemplate);
@@ -73,22 +74,22 @@ public class FrontServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String url = req.getRequestURI().substring(req.getContextPath().length());
-        if (url.startsWith("/admin/edit")) {
+        if (url.startsWith(Paths.ADMIN_EDIT)) {
             int id = Integer.parseInt(req.getParameter("id"));
             req.setAttribute(Attributes.ITEM, burgerAdminService.getById(id));
             req.setAttribute(Attributes.ITEMS, burgerAdminService.getAll());
-            req.getRequestDispatcher("/WEB-INF/admin/frontpage.jsp").forward(req, resp);
+            req.getRequestDispatcher(Paths.ADMIN_HOME).forward(req, resp);
             return;
         }
-        if (url.startsWith("/admin")) {
-            if (url.equals("/admin")) {
+        if (url.startsWith(Paths.ADMIN_ROOT)) {
+            if (url.equals(Paths.ADMIN_ROOT)) {
                 req.setAttribute(Attributes.ITEMS, burgerAdminService.getAll());
-                req.getRequestDispatcher("/WEB-INF/admin/frontpage.jsp").forward(req, resp);
+                req.getRequestDispatcher(Paths.ADMIN_HOME).forward(req, resp);
                 return;
             }
             return;
         }
-        if (url.startsWith("/more")) {
+        if (url.startsWith(Paths.DETAILS_ROOT)) {
             int id = Integer.parseInt(req.getParameter(Constants.PRODUCTS_COLUMN_ID));
             ProductModel model = burgerUserService.getById(id);
             req.setAttribute(Attributes.PRODUCTS_COLUMN_NAME, model.getName());
@@ -97,10 +98,10 @@ public class FrontServlet extends HttpServlet {
             req.setAttribute(Attributes.PRODUCTS_COLUMN_IMAGE, model.getImageUrl());
             req.setAttribute(Attributes.PRODUCTS_COLUMN_DESCRIPTION, model.getDescription());
             req.setAttribute(Attributes.PRODUCTS_COLUMN_CATEGORY, model.getCategory());
-            req.getRequestDispatcher("/WEB-INF/more.jsp").forward(req, resp);
+            req.getRequestDispatcher(Paths.DETAILS_HOME).forward(req, resp);
             return;
         }
-        if (url.startsWith("/update")) {
+        if (url.startsWith(Paths.UPDATE_ROOT)) {
             int id = Integer.parseInt(req.getParameter(Constants.ORDERPOSITIONS_COLUMN_ID));
             OrderPositionModel model = burgerUserService.getPositionById(id);
             req.setAttribute(Attributes.ORDERPOSITIONS_COLUMN_ID, model.getId());
@@ -109,21 +110,21 @@ public class FrontServlet extends HttpServlet {
             req.setAttribute(Attributes.ORDERPOSITIONS_COLUMN_PRODUCTNAME, model.getProductName());
             req.setAttribute(Attributes.ORDERPOSITIONS_COLUMN_PRICE, model.getProductPrice());
             req.setAttribute(Attributes.ORDERPOSITIONS_COLUMN_QUANTITY, model.getProductQuantity());
-            req.getRequestDispatcher("/WEB-INF/update.jsp").forward(req, resp);
+            req.getRequestDispatcher(Paths.UPDATE_HOME).forward(req, resp);
             return;
         }
 
-        if (url.startsWith("/remove")) {
-            if (url.equals("/remove")) {
+        if (url.startsWith(Paths.REMOVE_ROOT)) {
+            if (url.equals(Paths.REMOVE_ROOT)) {
                 int id = Integer.parseInt(req.getParameter(Parameters.ORDERPOSITIONS_COLUMN_ID));
                 burgerUserService.removePositionById(id);
-                resp.sendRedirect("/");
+                resp.sendRedirect(Paths.USER_ROOT);
                 return;
             }
             return;
         }
 
-        if (url.equals("/")) {
+        if (url.equals(Paths.USER_ROOT)) {
             HttpSession session = req.getSession();
             if (session.isNew()) {
                 int orderId = burgerUserService.createOrder();
@@ -132,16 +133,16 @@ public class FrontServlet extends HttpServlet {
             int orderId = (Integer) session.getAttribute(Attributes.BURGERSERVICE_ATTRIBUTE_ORDERID);
             req.setAttribute(Attributes.BURGERSERVICE_ATTRIBUTE_ORDEREDITEMS, burgerUserService.getAllOrderPosition(orderId));
             req.setAttribute(Attributes.ITEMS, burgerUserService.getAll());
-            req.getRequestDispatcher("/WEB-INF/frontpage.jsp").forward(req, resp);
+            req.getRequestDispatcher(Paths.USER_HOME).forward(req, resp);
         }
     }
 
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         String url = req.getRequestURI().substring(req.getContextPath().length());
-        if (url.startsWith("/admin")) {
-            if (url.equals("/admin")) {
+        if (url.startsWith(Paths.ADMIN_ROOT)) {
+            if (url.equals(Paths.ADMIN_ROOT)) {
                 int id = Integer.parseInt(req.getParameter(Parameters.PRODUCTS_COLUMN_ID));
                 String name = req.getParameter(Parameters.PRODUCTS_COLUMN_NAME);
                 int price = Integer.parseInt(req.getParameter(Parameters.PRODUCTS_COLUMN_PRICE));
@@ -155,8 +156,8 @@ public class FrontServlet extends HttpServlet {
             }
             return;
         }
-        if (url.startsWith("/update")) {
-            if (url.equals("/update")) {
+        if (url.startsWith(Paths.UPDATE_ROOT)) {
+            if (url.equals(Paths.UPDATE_ROOT)) {
                 int id = Integer.parseInt(req.getParameter(Parameters.ORDERPOSITIONS_COLUMN_ID));
                 int order_id = Integer.parseInt(req.getParameter(Parameters.ORDERPOSITIONS_COLUMN_ORDERID));
                 int product_id = Integer.parseInt(req.getParameter(Parameters.ORDERPOSITIONS_COLUMN_PRODUCTID));
@@ -164,12 +165,12 @@ public class FrontServlet extends HttpServlet {
                 int price = Integer.parseInt(req.getParameter(Parameters.ORDERPOSITIONS_COLUMN_PRICE));
                 int quantity = Integer.parseInt(req.getParameter(Parameters.ORDERPOSITIONS_COLUMN_QUANTITY));
                 burgerUserService.updatePosition(new OrderPositionModel(id, order_id, product_id, product_name, price, quantity));
-                resp.sendRedirect("/");
+                resp.sendRedirect(Paths.USER_ROOT);
                 return;
             }
             return;
         }
-        if (url.equals("/")) {
+        if (url.equals(Paths.USER_ROOT)) {
             HttpSession session = req.getSession();
             if (session.isNew()) {
                 int orderId = burgerUserService.createOrder();

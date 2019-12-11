@@ -30,10 +30,5 @@ public class Constants {
   public static final String LOG_MESSAGE_INIT = "init";
   public static final String LOG_MESSAGE_DESTROY = "destroy";
 
-  public static final String BURGERSERVICE_ATTRIBUTE_ORDERID = "order-id";
-  public static final String BURGERSERVICE_ATTRIBUTE_ORDERPOSITIONID = "id";
-  public static final String BURGERSERVICE_ATTRIBUTE_QUANTITY = "quantity";
-  public static final String BURGERSERVICE_ATTRIBUTE_ORDEREDITEMS = "ordered-items";
-
   private Constants() {}
 }

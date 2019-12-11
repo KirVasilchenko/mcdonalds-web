@@ -1,7 +1,9 @@
 package ru.rosbank.javaschool.web.servlet;
 
 import ru.rosbank.javaschool.util.SQLLib;
+import ru.rosbank.javaschool.web.constant.Attributes;
 import ru.rosbank.javaschool.web.constant.Constants;
+import ru.rosbank.javaschool.web.constant.Parameters;
 import ru.rosbank.javaschool.web.exception.DataSourceException;
 import ru.rosbank.javaschool.web.model.OrderPositionModel;
 import ru.rosbank.javaschool.web.model.ProductModel;
@@ -73,14 +75,14 @@ public class FrontServlet extends HttpServlet {
         String url = req.getRequestURI().substring(req.getContextPath().length());
         if (url.startsWith("/admin/edit")) {
             int id = Integer.parseInt(req.getParameter("id"));
-            req.setAttribute(Constants.ITEM, burgerAdminService.getById(id));
-            req.setAttribute(Constants.ITEMS, burgerAdminService.getAll());
+            req.setAttribute(Attributes.ITEM, burgerAdminService.getById(id));
+            req.setAttribute(Attributes.ITEMS, burgerAdminService.getAll());
             req.getRequestDispatcher("/WEB-INF/admin/frontpage.jsp").forward(req, resp);
             return;
         }
         if (url.startsWith("/admin")) {
             if (url.equals("/admin")) {
-                req.setAttribute(Constants.ITEMS, burgerAdminService.getAll());
+                req.setAttribute(Attributes.ITEMS, burgerAdminService.getAll());
                 req.getRequestDispatcher("/WEB-INF/admin/frontpage.jsp").forward(req, resp);
                 return;
             }
@@ -89,31 +91,31 @@ public class FrontServlet extends HttpServlet {
         if (url.startsWith("/more")) {
             int id = Integer.parseInt(req.getParameter(Constants.PRODUCTS_COLUMN_ID));
             ProductModel model = burgerUserService.getById(id);
-            req.setAttribute(Constants.PRODUCTS_COLUMN_NAME, model.getName());
-            req.setAttribute(Constants.PRODUCTS_COLUMN_PRICE, model.getPrice());
-            req.setAttribute(Constants.PRODUCTS_COLUMN_QUANTITY, model.getQuantity());
-            req.setAttribute(Constants.PRODUCTS_COLUMN_IMAGE, model.getImageUrl());
-            req.setAttribute(Constants.PRODUCTS_COLUMN_DESCRIPTION, model.getDescription());
-            req.setAttribute(Constants.PRODUCTS_COLUMN_CATEGORY, model.getCategory());
+            req.setAttribute(Attributes.PRODUCTS_COLUMN_NAME, model.getName());
+            req.setAttribute(Attributes.PRODUCTS_COLUMN_PRICE, model.getPrice());
+            req.setAttribute(Attributes.PRODUCTS_COLUMN_QUANTITY, model.getQuantity());
+            req.setAttribute(Attributes.PRODUCTS_COLUMN_IMAGE, model.getImageUrl());
+            req.setAttribute(Attributes.PRODUCTS_COLUMN_DESCRIPTION, model.getDescription());
+            req.setAttribute(Attributes.PRODUCTS_COLUMN_CATEGORY, model.getCategory());
             req.getRequestDispatcher("/WEB-INF/more.jsp").forward(req, resp);
             return;
         }
         if (url.startsWith("/update")) {
             int id = Integer.parseInt(req.getParameter(Constants.ORDERPOSITIONS_COLUMN_ID));
             OrderPositionModel model = burgerUserService.getPositionById(id);
-            req.setAttribute(Constants.ORDERPOSITIONS_COLUMN_ID, model.getId());
-            req.setAttribute(Constants.ORDERPOSITIONS_COLUMN_ORDERID, model.getOrderId());
-            req.setAttribute(Constants.ORDERPOSITIONS_COLUMN_PRODUCTID, model.getProductId());
-            req.setAttribute(Constants.ORDERPOSITIONS_COLUMN_PRODUCTNAME, model.getProductName());
-            req.setAttribute(Constants.ORDERPOSITIONS_COLUMN_PRICE, model.getProductPrice());
-            req.setAttribute(Constants.ORDERPOSITIONS_COLUMN_QUANTITY, model.getProductQuantity());
+            req.setAttribute(Attributes.ORDERPOSITIONS_COLUMN_ID, model.getId());
+            req.setAttribute(Attributes.ORDERPOSITIONS_COLUMN_ORDERID, model.getOrderId());
+            req.setAttribute(Attributes.ORDERPOSITIONS_COLUMN_PRODUCTID, model.getProductId());
+            req.setAttribute(Attributes.ORDERPOSITIONS_COLUMN_PRODUCTNAME, model.getProductName());
+            req.setAttribute(Attributes.ORDERPOSITIONS_COLUMN_PRICE, model.getProductPrice());
+            req.setAttribute(Attributes.ORDERPOSITIONS_COLUMN_QUANTITY, model.getProductQuantity());
             req.getRequestDispatcher("/WEB-INF/update.jsp").forward(req, resp);
             return;
         }
 
         if (url.startsWith("/remove")) {
             if (url.equals("/remove")) {
-                int id = Integer.parseInt(req.getParameter(Constants.ORDERPOSITIONS_COLUMN_ID));
+                int id = Integer.parseInt(req.getParameter(Parameters.ORDERPOSITIONS_COLUMN_ID));
                 burgerUserService.removePositionById(id);
                 resp.sendRedirect("/");
                 return;
@@ -125,11 +127,11 @@ public class FrontServlet extends HttpServlet {
             HttpSession session = req.getSession();
             if (session.isNew()) {
                 int orderId = burgerUserService.createOrder();
-                session.setAttribute(Constants.BURGERSERVICE_ATTRIBUTE_ORDERID, orderId);
+                session.setAttribute(Attributes.BURGERSERVICE_ATTRIBUTE_ORDERID, orderId);
             }
-            int orderId = (Integer) session.getAttribute(Constants.BURGERSERVICE_ATTRIBUTE_ORDERID);
-            req.setAttribute(Constants.BURGERSERVICE_ATTRIBUTE_ORDEREDITEMS, burgerUserService.getAllOrderPosition(orderId));
-            req.setAttribute(Constants.ITEMS, burgerUserService.getAll());
+            int orderId = (Integer) session.getAttribute(Attributes.BURGERSERVICE_ATTRIBUTE_ORDERID);
+            req.setAttribute(Attributes.BURGERSERVICE_ATTRIBUTE_ORDEREDITEMS, burgerUserService.getAllOrderPosition(orderId));
+            req.setAttribute(Attributes.ITEMS, burgerUserService.getAll());
             req.getRequestDispatcher("/WEB-INF/frontpage.jsp").forward(req, resp);
         }
     }
@@ -140,13 +142,13 @@ public class FrontServlet extends HttpServlet {
         String url = req.getRequestURI().substring(req.getContextPath().length());
         if (url.startsWith("/admin")) {
             if (url.equals("/admin")) {
-                int id = Integer.parseInt(req.getParameter(Constants.PRODUCTS_COLUMN_ID));
-                String name = req.getParameter(Constants.PRODUCTS_COLUMN_NAME);
-                int price = Integer.parseInt(req.getParameter(Constants.PRODUCTS_COLUMN_PRICE));
-                int quantity = Integer.parseInt(req.getParameter(Constants.PRODUCTS_COLUMN_QUANTITY));
-                String image = req.getParameter(Constants.PRODUCTS_COLUMN_IMAGE);
-                String description = req.getParameter(Constants.PRODUCTS_COLUMN_DESCRIPTION);
-                String category = req.getParameter(Constants.PRODUCTS_COLUMN_CATEGORY);
+                int id = Integer.parseInt(req.getParameter(Parameters.PRODUCTS_COLUMN_ID));
+                String name = req.getParameter(Parameters.PRODUCTS_COLUMN_NAME);
+                int price = Integer.parseInt(req.getParameter(Parameters.PRODUCTS_COLUMN_PRICE));
+                int quantity = Integer.parseInt(req.getParameter(Parameters.PRODUCTS_COLUMN_QUANTITY));
+                String image = req.getParameter(Parameters.PRODUCTS_COLUMN_IMAGE);
+                String description = req.getParameter(Parameters.PRODUCTS_COLUMN_DESCRIPTION);
+                String category = req.getParameter(Parameters.PRODUCTS_COLUMN_CATEGORY);
                 burgerAdminService.save(new ProductModel(id, name, price, quantity, image, description, category));
                 resp.sendRedirect(url);
                 return;
@@ -155,12 +157,12 @@ public class FrontServlet extends HttpServlet {
         }
         if (url.startsWith("/update")) {
             if (url.equals("/update")) {
-                int id = Integer.parseInt(req.getParameter(Constants.ORDERPOSITIONS_COLUMN_ID));
-                int order_id = Integer.parseInt(req.getParameter(Constants.ORDERPOSITIONS_COLUMN_ORDERID));
-                int product_id = Integer.parseInt(req.getParameter(Constants.ORDERPOSITIONS_COLUMN_PRODUCTID));
-                String product_name = req.getParameter(Constants.ORDERPOSITIONS_COLUMN_PRODUCTNAME);
-                int price = Integer.parseInt(req.getParameter(Constants.ORDERPOSITIONS_COLUMN_PRICE));
-                int quantity = Integer.parseInt(req.getParameter(Constants.ORDERPOSITIONS_COLUMN_QUANTITY));
+                int id = Integer.parseInt(req.getParameter(Parameters.ORDERPOSITIONS_COLUMN_ID));
+                int order_id = Integer.parseInt(req.getParameter(Parameters.ORDERPOSITIONS_COLUMN_ORDERID));
+                int product_id = Integer.parseInt(req.getParameter(Parameters.ORDERPOSITIONS_COLUMN_PRODUCTID));
+                String product_name = req.getParameter(Parameters.ORDERPOSITIONS_COLUMN_PRODUCTNAME);
+                int price = Integer.parseInt(req.getParameter(Parameters.ORDERPOSITIONS_COLUMN_PRICE));
+                int quantity = Integer.parseInt(req.getParameter(Parameters.ORDERPOSITIONS_COLUMN_QUANTITY));
                 burgerUserService.updatePosition(new OrderPositionModel(id, order_id, product_id, product_name, price, quantity));
                 resp.sendRedirect("/");
                 return;
@@ -171,11 +173,11 @@ public class FrontServlet extends HttpServlet {
             HttpSession session = req.getSession();
             if (session.isNew()) {
                 int orderId = burgerUserService.createOrder();
-                session.setAttribute(Constants.BURGERSERVICE_ATTRIBUTE_ORDERID, orderId);
+                session.setAttribute(Attributes.BURGERSERVICE_ATTRIBUTE_ORDERID, orderId);
             }
-            int orderId = (Integer) session.getAttribute(Constants.BURGERSERVICE_ATTRIBUTE_ORDERID);
-            int id = Integer.parseInt(req.getParameter(Constants.BURGERSERVICE_ATTRIBUTE_ORDERPOSITIONID));
-            int quantity = Integer.parseInt(req.getParameter(Constants.BURGERSERVICE_ATTRIBUTE_QUANTITY));
+            int orderId = (Integer) session.getAttribute(Attributes.BURGERSERVICE_ATTRIBUTE_ORDERID);
+            int id = Integer.parseInt(req.getParameter(Parameters.BURGERSERVICE_ATTRIBUTE_ORDERPOSITIONID));
+            int quantity = Integer.parseInt(req.getParameter(Parameters.BURGERSERVICE_ATTRIBUTE_QUANTITY));
             burgerUserService.order(orderId, id, quantity);
             resp.sendRedirect(url);
         }
